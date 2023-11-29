@@ -42,7 +42,7 @@
         <Button
             app:icon="@drawable/search_button"
             app:iconTint="@color/black"
-            app:backgroundTint="#ffffff"
+            app:backgroundTint="@color/white"
             android:text="Поиск"
             android:textStyle="normal"
             android:textAllCaps="false"
@@ -60,7 +60,7 @@
         <Button
             app:icon="@drawable/music_button"
             app:iconTint="@color/black"
-            app:backgroundTint="#ffffff"
+            app:backgroundTint="@color/white"
             android:text="Медиатека"
             android:textStyle="normal"
             android:textAllCaps="false"
@@ -83,7 +83,7 @@
         <Button
             app:icon="@drawable/settings_button"
             app:iconTint="@color/black"
-            app:backgroundTint="#ffffff"
+            app:backgroundTint="@color/white"
             android:text="Настройки"
             android:textStyle="normal"
             android:textAllCaps="false"
@@ -95,7 +95,7 @@
             app:iconPadding="8dp"
             android:layout_weight="1"
             app:iconGravity="textStart"
-            android:layout_marginBottom="16dp"
+
             />
 
 
