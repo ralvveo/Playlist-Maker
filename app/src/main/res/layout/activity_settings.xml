@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -9,29 +10,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:paddingLeft="16dp"
+        android:paddingBottom="@dimen/_16dp"
+        android:paddingTop="@dimen/_16dp"
+        android:paddingLeft="@dimen/_16dp"
         android:layout_marginBottom="24dp"
         >
 
         <Button
+            android:id="@+id/settings_button_back"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/arrow_back"
-            app:iconTint="@color/black"
-            app:backgroundTint="@color/white"
-            android:text="Настройки"
-            android:textColor="@color/black"
+            android:gravity="start"
+            android:letterSpacing="0"
+            android:text="@string/settings"
             android:textAllCaps="false"
+            android:textColor="@color/black"
             android:textSize="26sp"
             android:textStyle="normal"
-            android:letterSpacing="0"
-            android:gravity="start"
-            app:iconPadding="12dp"
+            app:backgroundTint="@color/white"
+            app:icon="@drawable/arrow_back"
+            app:iconPadding="@dimen/_12dp"
 
-            >
-
+            app:iconTint="@color/black">
 
 
         </Button>
@@ -48,83 +49,86 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                app:icon="@drawable/share_button"
-                app:iconTint="#828282"
-                app:backgroundTint="@color/white"
-                android:text="Темная тема"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:letterSpacing="0"
-                app:iconGravity="end"
+                android:drawableTint="#0B0A0A"
                 android:gravity="center|start"
-                app:iconPadding="12dp"
-                app:iconMarginBottom="10dp"
-                android:paddingLeft="16dp"
+                android:letterSpacing="0"
+                android:paddingLeft="@dimen/_16dp"
+                android:text="@string/dark_theme"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+
+                android:textSize="@dimen/_16sp"
+
+                app:backgroundTint="@color/white"
 
 
-                />
+                app:icon="@drawable/share_button"
+                app:iconGravity="end"
+                app:iconPadding="@dimen/_12dp"
+                app:iconTint="@color/grey_icon"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 
             <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                app:icon="@drawable/share_button"
-                app:iconTint="#828282"
-                app:backgroundTint="@color/white"
-                android:text="Поделиться приложением"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:letterSpacing="0"
-                app:iconGravity="end"
                 android:gravity="center|start"
-                app:iconPadding="12dp"
-                app:iconMarginBottom="10dp"
+                android:letterSpacing="0"
+                android:text="@string/share_app"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16sp"
+                app:backgroundTint="@color/white"
+                app:icon="@drawable/share_button"
+                app:iconGravity="end"
 
 
-
-                />
+                app:iconPadding="@dimen/_12dp"
+                app:iconTint="@color/grey_icon"
+                app:rippleColor="@color/white" />
 
             <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:gravity="center|start"
+                android:letterSpacing="0"
+                android:text="@string/write_to_support"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16sp"
+                app:backgroundTint="@color/white"
                 app:icon="@drawable/support_button"
-                app:iconTint="#828282"
-                app:backgroundTint="@color/white"
-                android:text="Написать в поддержку"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:letterSpacing="0"
                 app:iconGravity="end"
-                android:gravity="center|start"
-                app:iconPadding="12dp"
-                app:iconMarginBottom="10dp"
 
 
-                />
+                app:iconPadding="@dimen/_12dp"
+                app:iconTint="@color/grey_icon" />
 
             <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                app:icon="@drawable/arrow_forward"
-                app:iconTint="#828282"
-                app:backgroundTint="@color/white"
-                android:text="Пользовательское соглашение"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:letterSpacing="0"
-                app:iconGravity="end"
                 android:gravity="center|start"
-                app:iconPadding="12dp"
-                app:iconMarginBottom="10dp"
+                android:letterSpacing="0"
+                android:text="@string/user_assignment"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16sp"
+                app:backgroundTint="@color/white"
+                app:icon="@drawable/arrow_forward"
+                app:iconGravity="end"
 
-                />
+
+                app:iconPadding="@dimen/_12dp"
+                app:iconTint="@color/grey_icon" />
 
 
         </LinearLayout>
