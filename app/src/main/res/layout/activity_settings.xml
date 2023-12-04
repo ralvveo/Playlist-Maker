@@ -10,32 +10,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/_16dp"
-        android:paddingTop="@dimen/_16dp"
-        android:paddingLeft="@dimen/_16dp"
+        android:paddingTop="@dimen/_12dp"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="@dimen/_12dp"
+        android:layout_marginLeft="4dp"
+        android:paddingBottom="4dp"
         android:layout_marginBottom="24dp"
         >
 
-        <Button
+        <ImageView
             android:id="@+id/settings_button_back"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:letterSpacing="0"
+            android:background="@drawable/arrow_back"
+            android:layout_gravity="center|start"
+            app:backgroundTint="@color/black"
+            android:layout_marginRight="@dimen/_12dp"
+            android:layout_marginTop="@dimen/_12dp"
+            android:layout_marginBottom="@dimen/_12dp"
+            android:foreground="?attr/selectableItemBackground"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/black"
-            android:textSize="26sp"
-            android:textStyle="normal"
-            app:backgroundTint="@color/white"
-            app:icon="@drawable/arrow_back"
-            app:iconPadding="@dimen/_12dp"
-
-            app:iconTint="@color/black">
-
-
-        </Button>
+            android:textSize="@dimen/_22sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginBottom="@dimen/_12dp"
+            android:layout_marginLeft="@dimen/_12dp"
+            />
 
     </LinearLayout>
 
@@ -58,26 +65,34 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_16sp"
             app:backgroundTint="@color/white"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            android:paddingRight="@dimen/_12dp"
+            android:paddingTop="@dimen/_21dp"
+            android:paddingBottom="@dimen/_21dp"
+             />
 
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="@dimen/_16dp"
+            android:paddingRight="@dimen/_16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/share_app"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sp"
                 android:layout_gravity="center|start"
+                android:layout_marginTop="@dimen/_21dp"
+                android:layout_marginBottom="@dimen/_21dp"
+
                 />
 
             <ImageView
@@ -86,6 +101,7 @@
                 android:background="@drawable/share_button"
                 android:layout_gravity="center|end"
                 app:backgroundTint="@color/grey_icon"
+
                 />
 
         </FrameLayout>
@@ -96,18 +112,21 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="@dimen/_16dp"
+            android:paddingRight="@dimen/_16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/write_to_support"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sp"
                 android:layout_gravity="center|start"
+                android:layout_marginTop="@dimen/_21dp"
+                android:layout_marginBottom="@dimen/_21dp"
                 />
 
             <ImageView
@@ -116,6 +135,7 @@
                 android:background="@drawable/support_button"
                 android:layout_gravity="center|end"
                 app:backgroundTint="@color/grey_icon"
+
                 />
 
         </FrameLayout>
@@ -126,18 +146,21 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="@dimen/_16dp"
+            android:paddingRight="@dimen/_16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
             >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_assignment"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sp"
                 android:layout_gravity="center|start"
+                android:layout_marginTop="@dimen/_21dp"
+                android:layout_marginBottom="@dimen/_21dp"
                 />
 
             <ImageView
@@ -146,6 +169,7 @@
                 android:background="@drawable/arrow_forward"
                 android:layout_gravity="center|end"
                 app:backgroundTint="@color/grey_icon"
+
                 />
 
         </FrameLayout>

@@ -4,13 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val settingsButtonBack = findViewById<Button>(R.id.settings_button_back)
+        val settingsButtonBack = findViewById<ImageView>(R.id.settings_button_back)
         settingsButtonBack.setOnClickListener {
 
             val displayIntent = Intent(this, MainActivity::class.java)
