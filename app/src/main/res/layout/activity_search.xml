@@ -55,72 +55,59 @@
 
 
     >
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:background="@drawable/search_bg"
             app:cornerRadius="@dimen/_8dp"
             android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
             >
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:gravity="center|start"
-                >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/search_button2"
-                    android:backgroundTint="@color/search_content_color"
-                    android:layout_marginLeft="@dimen/_12dp"
 
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_button2"
+                android:backgroundTint="@color/search_content_color"
+                android:layout_marginLeft="@dimen/_12dp"
+                android:layout_gravity="center_vertical"
+                />
 
-                    />
-
-                <EditText
-                    android:id="@+id/input_edit_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_8dp"
-                    android:lines="1"
-                    android:maxLength="15"
-                    android:hint="Поиск"
-                    android:inputType="textNoSuggestions"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/ys_display_regular"
-                    android:textSize="@dimen/_16sp"
-                    android:textColorHint="@color/search_content_color"
-                    android:textColor="@color/black"
-                    />
-
-
-            </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center|end"
-                    >
-
-                    <ImageView
-                        android:id="@+id/clear_icon"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:background="@drawable/cross_icon"
-                        android:backgroundTint="@color/search_content_color"
-                        android:layout_marginRight="@dimen/_8dp"
-                        android:visibility="gone"
-
-                        />
-
-                </LinearLayout>
+            <EditText
+                android:id="@+id/input_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:maxLength="10"
+                android:hint="Поиск"
+                android:inputType="textNoSuggestions"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/ys_display_regular"
+                android:textSize="@dimen/_16sp"
+                android:textColorHint="@color/search_content_color"
+                android:textColor="@color/black"
+                android:layout_marginLeft="36dp"
+                android:layout_gravity="center_vertical"
+                />
 
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/clear_icon"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@drawable/cross_icon"
+                android:backgroundTint="@color/search_content_color"
+                android:layout_marginRight="@dimen/_8dp"
+                android:visibility="gone"
+                android:layout_gravity="center"
+
+                />
+
+
+
+
+        </FrameLayout>
 
 
     </LinearLayout>
