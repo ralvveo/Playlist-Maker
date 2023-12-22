@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_bg">#1A1B22</color>
+    <color name="settings_text">#FFFFFFFF</color>#1A1B22
+    <color name="settings_bg">#1A1B22</color>
+    <color name="settings_icon">#FFFFFFFF</color>
+    <color name="settings_arrowback">#FFFFFFFF</color>
+
+    <color name="search_content_color">#FF000000</color>
+</resources>
