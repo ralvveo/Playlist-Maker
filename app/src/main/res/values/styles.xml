@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="iconTint">@color/black</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_22sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="cornerRadius">@dimen/_16dp</item>
+        <item name="iconPadding">@dimen/_8dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="SettingsButtonStyle">
+        <item name="android:paddingLeft">@dimen/_16dp</item>
+        <item name="android:paddingRight">@dimen/_16dp</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="SettingsButtonTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/settings_text</item>
+        <item name="android:textSize">@dimen/_16sp</item>
+        <item name="android:layout_gravity">center|start</item>
+        <item name="android:layout_marginTop">@dimen/_22dp</item>
+        <item name="android:layout_marginBottom">@dimen/_22dp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="SettingsButtonIconStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center|end</item>
+        <item name="backgroundTint">@color/settings_icon</item>
+
+    </style>
+</resources>

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/settings_bg"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/arrow_back"
             android:layout_gravity="center|start"
-            app:backgroundTint="@color/black"
+            app:backgroundTint="@color/settings_arrowback"
             android:layout_marginRight="@dimen/_12dp"
             android:layout_marginTop="@dimen/_12dp"
             android:layout_marginBottom="@dimen/_12dp"
@@ -35,11 +35,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
+            android:fontFamily="@font/ys_display_medium"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/black"
+            android:textColor="@color/settings_text"
             android:textSize="@dimen/_22sp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_12dp"
             android:layout_marginBottom="@dimen/_12dp"
             android:layout_marginLeft="@dimen/_12dp"
             />
@@ -62,114 +63,64 @@
             android:paddingLeft="@dimen/_16dp"
             android:text="@string/dark_theme"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="@color/settings_text"
             android:textSize="@dimen/_16sp"
             app:backgroundTint="@color/white"
             android:paddingRight="@dimen/_12dp"
-            android:paddingTop="@dimen/_21dp"
-            android:paddingBottom="@dimen/_21dp"
+            android:paddingTop="@dimen/_22dp"
+            android:paddingBottom="@dimen/_22dp"
              />
 
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/_16dp"
-            android:paddingRight="@dimen/_16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
+            android:id="@+id/settings_button_share"
+            style="@style/SettingsButtonStyle"
             >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/share_app"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16sp"
-                android:layout_gravity="center|start"
-                android:layout_marginTop="@dimen/_21dp"
-                android:layout_marginBottom="@dimen/_21dp"
-
+                style="@style/SettingsButtonTextStyle"
                 />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:background="@drawable/share_button"
-                android:layout_gravity="center|end"
-                app:backgroundTint="@color/grey_icon"
-
+                style="@style/SettingsButtonIconStyle"
                 />
 
         </FrameLayout>
 
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/_16dp"
-            android:paddingRight="@dimen/_16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
+            android:id="@+id/settings_button_support"
+            style="@style/SettingsButtonStyle"
             >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/write_to_support"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16sp"
-                android:layout_gravity="center|start"
-                android:layout_marginTop="@dimen/_21dp"
-                android:layout_marginBottom="@dimen/_21dp"
+                style="@style/SettingsButtonTextStyle"
                 />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:background="@drawable/support_button"
-                android:layout_gravity="center|end"
-                app:backgroundTint="@color/grey_icon"
-
+                style="@style/SettingsButtonIconStyle"
                 />
 
         </FrameLayout>
 
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/_16dp"
-            android:paddingRight="@dimen/_16dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
+            android:id="@+id/settings_button_assignment"
+            style="@style/SettingsButtonStyle"
             >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/user_assignment"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16sp"
-                android:layout_gravity="center|start"
-                android:layout_marginTop="@dimen/_21dp"
-                android:layout_marginBottom="@dimen/_21dp"
+                style="@style/SettingsButtonTextStyle"
                 />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:background="@drawable/arrow_forward"
-                android:layout_gravity="center|end"
-                app:backgroundTint="@color/grey_icon"
-
+                style="@style/SettingsButtonIconStyle"
                 />
 
         </FrameLayout>
