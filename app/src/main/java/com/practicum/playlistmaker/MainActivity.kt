@@ -1,8 +1,10 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -38,6 +40,14 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+        fun dpToPx(dp: Float, context: Context): Int {
+            return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                context.resources.displayMetrics).toInt()
+        }
+        val cornerTrackImageSize = dpToPx(2f, this)
 
     }
 

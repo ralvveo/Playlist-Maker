@@ -7,4 +7,6 @@
     <color name="settings_arrowback">#FFFFFFFF</color>
 
     <color name="search_content_color">#FF000000</color>
+    <color name="search_content_color2">#FFFFFFFF</color>
+
 </resources>

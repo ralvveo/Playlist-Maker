@@ -10,4 +10,5 @@
     <color name="settings_arrowback">#FF000000</color>
 
     <color name="search_content_color">#AEAFB4</color>
+    <color name="search_content_color2">#AEAFB4</color>
 </resources>

@@ -52,6 +52,7 @@
         android:paddingLeft="@dimen/_16dp"
         android:paddingTop="@dimen/_8dp"
         android:paddingBottom="@dimen/_8dp"
+        android:layout_marginBottom="@dimen/_16dp"
 
 
     >
@@ -94,8 +95,8 @@
 
             <ImageView
                 android:id="@+id/clear_icon"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="@dimen/_12dp"
+                android:layout_height="@dimen/_12dp"
                 android:background="@drawable/cross_icon"
                 android:backgroundTint="@color/search_content_color"
                 android:layout_marginRight="@dimen/_8dp"
@@ -111,6 +112,12 @@
 
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 </LinearLayout>
 
 
