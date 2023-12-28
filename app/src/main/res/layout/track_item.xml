@@ -3,6 +3,7 @@
 <FrameLayout
     android:id="@+id/trackItem"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="61dp"
     android:orientation="horizontal"
@@ -29,10 +30,11 @@
         android:orientation="vertical"
         android:gravity="center_vertical"
         >
-        
+
         <TextView
             android:id="@+id/trackItemName"
             android:layout_marginBottom="1dp"
+            tools:text="Track Name"
             style="@style/SettingsTrackItemNameStyle"
             />
 
@@ -41,12 +43,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            
+
             <TextView
                 android:id="@+id/trackItemArtistName"
+                tools:text="Artist Name"
                 style="@style/SettingsTrackItemTextStyle"
                 />
-            
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,6 +59,7 @@
 
             <TextView
                 android:id="@+id/trackItemTime"
+                tools:text="1:00"
                 style="@style/SettingsTrackItemTextStyle"
                 />
 
