@@ -13,6 +13,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils.fitCenter
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TracksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -21,10 +23,11 @@ class TracksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val trackArtistName: TextView = itemView.findViewById(R.id.trackItemArtistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackItemTime)
 
+
     fun bind(model: Track) {
         trackName.text = model.trackName
         trackArtistName.text = model.artistName
-        trackTime.text = model.trackTime
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime)
         val roundedCornersSize: Int = 8
         Glide.with(itemView)
             .load(model.artworkUrl100)

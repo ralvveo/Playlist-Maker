@@ -11,4 +11,5 @@
 
     <color name="search_content_color">#AEAFB4</color>
     <color name="search_content_color2">#AEAFB4</color>
+    <color name="search_error_icon_color">#1A1B22</color>
 </resources>
