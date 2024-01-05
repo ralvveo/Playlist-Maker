@@ -7,4 +7,7 @@
     <color name="settings_arrowback">#FFFFFFFF</color>
 
     <color name="search_content_color">#FF000000</color>
+    <color name="search_content_color2">#FFFFFFFF</color>
+    <color name="search_error_icon_color">#FFFFFFFF</color>
+
 </resources>
