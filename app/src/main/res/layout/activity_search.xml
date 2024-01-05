@@ -104,7 +104,6 @@
                 android:layout_marginRight="@dimen/_8dp"
                 android:visibility="gone"
                 android:layout_gravity="center"
-
                 />
 
 
