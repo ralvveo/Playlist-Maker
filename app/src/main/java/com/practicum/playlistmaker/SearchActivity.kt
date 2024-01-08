@@ -1,9 +1,12 @@
 package com.practicum.playlistmaker
 
+
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +20,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.internal.ContextUtils.getActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +41,8 @@ class SearchActivity : AppCompatActivity() {
     private val itunesSearchService = retrofit.create(ItunesSearchApi::class.java)
 
 
-
+    val trackHistoryList: MutableList<Track> = mutableListOf()
+    val trackHistoryAdapter = TracksAdapter(trackHistoryList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
 
-
+        //Список Треков в Поиске
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         val clearButton = findViewById<ImageView>(R.id.clear_icon)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
@@ -60,6 +65,7 @@ class SearchActivity : AppCompatActivity() {
         val trackList: MutableList<Track> = mutableListOf()
         val trackAdapter = TracksAdapter(trackList)
         recyclerView.adapter = trackAdapter
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -68,8 +74,21 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-        //Видимость Крестика в Поиске
+        //История Поиска
+        val searchHistory = findViewById<LinearLayout>(R.id.search_history)
+        val searchHistoryList = findViewById<RecyclerView>(R.id.search_history_list)
+        searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val testTrack = Track("track1", "macan", 186352, "-")
+        trackHistoryList.add(testTrack)
+        searchHistoryList.adapter = trackHistoryAdapter
+        trackHistoryAdapter.notifyDataSetChanged()
 
+
+
+
+
+
+        //Видимость Крестика в Поиске
         fun clearButtonVisibility(s: CharSequence?): Int {
 
             return if (s.isNullOrEmpty()) {
@@ -82,6 +101,10 @@ class SearchActivity : AppCompatActivity() {
                 View.VISIBLE
             }
         }
+        //Видимость Истории Поиска
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            searchHistory.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+        }
 
         //Text Watcher
         val simpleTextWatcher = object : TextWatcher {
@@ -92,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 clearButton.visibility = clearButtonVisibility(s)
-
+                searchHistory.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -100,6 +123,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
 
 
 
@@ -176,6 +200,7 @@ class SearchActivity : AppCompatActivity() {
     //Сохранение введенного в Поиске Текста
     private var searchText = TEXT
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
@@ -194,6 +219,21 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         inputEditText.setText(searchText)
     }
+
+
+    fun addTrackToHistory(track: Track){
+        trackHistoryList.add(track)
+        Log.d("dyheudhqhdqbjiqdjkbqd", trackHistoryList.toString())
+        trackHistoryAdapter.notifyDataSetChanged()
+
+        //val sharedPrefs:SharedPreferences? = this.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        sharedPrefs?.edit()
+            ?.putString(SEARCH_HISTORY, track.trackName)
+            ?.apply()
+
+    }
+
+
 
 
 }

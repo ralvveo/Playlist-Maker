@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -52,6 +54,15 @@ class SettingsActivity : AppCompatActivity() {
             val settingsIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.assignment_link)))
             startActivity(settingsIntent)
         }
+
+        //Переключатель темы
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        themeSwitcher.setChecked(sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false))
 
 
     }
