@@ -227,9 +227,9 @@ class SearchActivity : AppCompatActivity() {
         trackHistoryAdapter.notifyDataSetChanged()
 
         //val sharedPrefs:SharedPreferences? = this.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        sharedPrefs?.edit()
-            ?.putString(SEARCH_HISTORY, track.trackName)
-            ?.apply()
+            //sharedPrefs?.edit()
+            //?.putString(SEARCH_HISTORY, track.trackName)
+            //?.apply()
 
     }
 
