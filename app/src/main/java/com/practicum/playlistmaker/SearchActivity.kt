@@ -4,6 +4,7 @@ package com.practicum.playlistmaker
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -15,12 +16,16 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.internal.ContextUtils.getActivity
+
+import com.practicum.playlistmaker.App.Companion.trackHistoryList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,8 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private val itunesSearchService = retrofit.create(ItunesSearchApi::class.java)
 
 
-    val trackHistoryList: MutableList<Track> = mutableListOf()
-    val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +61,17 @@ class SearchActivity : AppCompatActivity() {
             startActivity(displayIntent)
         }
 
+        val searchHistory = findViewById<ScrollView>(R.id.search_history)
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistoryObject = SearchHistory(sharedPrefs)
+        trackHistoryList = searchHistoryObject.read()
+        val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+        trackHistoryAdapter.notifyDataSetChanged()
+
+
+
+
+
 
         //Список Треков в Поиске
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
@@ -65,23 +81,21 @@ class SearchActivity : AppCompatActivity() {
         val trackList: MutableList<Track> = mutableListOf()
         val trackAdapter = TracksAdapter(trackList)
         recyclerView.adapter = trackAdapter
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
+        //История Поиска
+
+        val searchHistoryList = findViewById<RecyclerView>(R.id.search_history_list)
+        searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+        searchHistoryList.adapter = trackHistoryAdapter
+        trackHistoryAdapter.notifyDataSetChanged()
         clearButton.setOnClickListener {
             inputEditText.setText("")
             trackList.clear()
             trackAdapter.notifyDataSetChanged()
 
+
         }
 
-        //История Поиска
-        val searchHistory = findViewById<LinearLayout>(R.id.search_history)
-        val searchHistoryList = findViewById<RecyclerView>(R.id.search_history_list)
-        searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val testTrack = Track("track1", "macan", 186352, "-")
-        trackHistoryList.add(testTrack)
-        searchHistoryList.adapter = trackHistoryAdapter
-        trackHistoryAdapter.notifyDataSetChanged()
 
 
 
@@ -103,7 +117,17 @@ class SearchActivity : AppCompatActivity() {
         }
         //Видимость Истории Поиска
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            searchHistory.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+            searchHistory.visibility = if (hasFocus && inputEditText.text.isEmpty() && trackHistoryList.isNotEmpty()) View.VISIBLE else View.GONE
+            trackHistoryAdapter.notifyDataSetChanged()
+            trackAdapter.notifyDataSetChanged()
+        }
+
+        val clearHistoryButton = findViewById<Button>(R.id.search_history_button)
+        clearHistoryButton.setOnClickListener{
+            searchHistoryObject.clear()
+            trackHistoryList.clear()
+            trackHistoryAdapter.notifyDataSetChanged()
+            searchHistory.visibility = View.GONE
         }
 
         //Text Watcher
@@ -115,7 +139,13 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 clearButton.visibility = clearButtonVisibility(s)
-                searchHistory.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                searchHistory.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true && trackHistoryList.isNotEmpty()) View.VISIBLE else View.GONE
+                trackHistoryAdapter.notifyDataSetChanged()
+                if (s?.isEmpty() == true){
+                    trackList.clear()
+                    trackAdapter.notifyDataSetChanged()
+                }
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -131,8 +161,10 @@ class SearchActivity : AppCompatActivity() {
 
         //Работа c Itunes Search Api
         fun goForApiSearch(){
-            val placeholderNothingFound =  findViewById<LinearLayout>(R.id.nothing_found)
-            val placeholderNoInternet =  findViewById<LinearLayout>(R.id.no_internet)
+            val placeholderError =  findViewById<LinearLayout>(R.id.search_error)
+            val placeholderErrorText = findViewById<TextView>(R.id.search_error_text)
+            val placeholderErrorImage = findViewById<ImageView>(R.id.search_error_image)
+            val placeholderErrorButton = findViewById<Button>(R.id.search_error_button)
 
                 if (inputEditText.text.isNotEmpty()) {
                     itunesSearchService.search(inputEditText.text.toString()).enqueue(object :
@@ -145,26 +177,31 @@ class SearchActivity : AppCompatActivity() {
                                 if (response.body()?.results?.isNotEmpty() == true) {
                                     trackList.addAll(response.body()?.results!!)
                                     trackAdapter.notifyDataSetChanged()
-                                    placeholderNothingFound.visibility = View.GONE
-                                    placeholderNoInternet.visibility = View.GONE
+                                    placeholderError.visibility = View.GONE
                                 }
                                 if (trackList.isEmpty()) {
-                                    placeholderNothingFound.visibility = View.VISIBLE
-                                    placeholderNoInternet.visibility = View.GONE
+                                    placeholderError.visibility = View.VISIBLE
+                                    placeholderErrorButton.visibility = View.GONE
+                                    placeholderErrorText.setText(R.string.nothing_found)
+                                    placeholderErrorImage.setBackgroundResource(R.drawable.nothing_found_icon)
                                     trackList.clear()
                                     trackAdapter.notifyDataSetChanged()
                                 }
                             }
                             else {
-                                placeholderNothingFound.visibility = View.GONE
-                                placeholderNoInternet.visibility = View.VISIBLE
+                                placeholderError.visibility = View.VISIBLE
+                                placeholderErrorButton.visibility = View.VISIBLE
+                                placeholderErrorText.setText(R.string.no_internet_text)
+                                placeholderErrorImage.setBackgroundResource(R.drawable.no_internet_icon)
 
                             }
                         }
 
                         override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                            placeholderNothingFound.visibility = View.GONE
-                            placeholderNoInternet.visibility = View.VISIBLE
+                            placeholderError.visibility = View.VISIBLE
+                            placeholderErrorButton.visibility = View.VISIBLE
+                            placeholderErrorText.setText(R.string.no_internet_text)
+                            placeholderErrorImage.setBackgroundResource(R.drawable.no_internet_icon)
                         }
 
                     })
@@ -178,7 +215,7 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        val updateButton = findViewById<Button>(R.id.no_internet_button)
+        val updateButton = findViewById<Button>(R.id.search_error_button)
         updateButton.setOnClickListener {
             goForApiSearch()
         }
@@ -192,6 +229,8 @@ class SearchActivity : AppCompatActivity() {
 
 
     }
+    val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+
 
 
 
@@ -206,6 +245,11 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         searchText = inputEditText.text.toString()
         outState.putString(SEARCH_TEXT, searchText)
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistoryObject = SearchHistory(sharedPrefs)
+        searchHistoryObject.write(trackHistoryList)
+        trackHistoryAdapter.notifyDataSetChanged()
+
     }
 
     companion object {
@@ -218,20 +262,13 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString(SEARCH_TEXT, TEXT)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         inputEditText.setText(searchText)
-    }
-
-
-    fun addTrackToHistory(track: Track){
-        trackHistoryList.add(track)
-        Log.d("dyheudhqhdqbjiqdjkbqd", trackHistoryList.toString())
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistoryObject = SearchHistory(sharedPrefs)
+        trackHistoryList = searchHistoryObject.read()
         trackHistoryAdapter.notifyDataSetChanged()
-
-        //val sharedPrefs:SharedPreferences? = this.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-            //sharedPrefs?.edit()
-            //?.putString(SEARCH_HISTORY, track.trackName)
-            //?.apply()
-
     }
+
+
 
 
 

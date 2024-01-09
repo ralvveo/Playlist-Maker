@@ -14,7 +14,9 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
 
         //Кнопка Назад
         val settingsButtonBack = findViewById<ImageView>(R.id.settings_button_back)
@@ -56,14 +58,37 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         //Переключатель темы
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
+
+
         }
+
+
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        themeSwitcher.setChecked(sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false))
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+    }
 
-
+    //Фикс бага с мигающим экраном при смене темы
+    override fun recreate() {
+        finish()
+        overridePendingTransition(
+            R.anim.empty_animation,
+            R.anim.empty_animation
+        )
+        startActivity(intent)
+        overridePendingTransition(
+            R.anim.empty_animation,
+            R.anim.empty_animation
+        )
     }
 }
