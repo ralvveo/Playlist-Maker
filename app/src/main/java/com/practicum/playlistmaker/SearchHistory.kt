@@ -1,12 +1,11 @@
 package com.practicum.playlistmaker
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.App.Companion.trackHistoryList
 
-class SearchHistory(val sharedPreferences: SharedPreferences?) {
+class SearchHistory() {
     fun addTrackToHistory(track: Track){
         if (track in trackHistoryList){
             trackHistoryList.remove(track)
@@ -24,23 +23,22 @@ class SearchHistory(val sharedPreferences: SharedPreferences?) {
         trackHistoryAdapter.notifyDataSetChanged()
     }
 
-    fun read(): MutableList<Track> {
-        val json = sharedPreferences!!.getString(SEARCH_HISTORY, null) ?: return mutableListOf<Track>()
+    fun read(sharedPreferences: SharedPreferences): MutableList<Track> {
+        val json = sharedPreferences.getString(SEARCH_HISTORY, null) ?: return mutableListOf<Track>()
         val mutableListTrackType = object : TypeToken<MutableList<Track>>() {}.type
         return Gson().fromJson(json, mutableListTrackType)
     }
 
     // запись
-    fun write(trackList: MutableList<Track>) {
+    fun write(sharedPreferences: SharedPreferences, trackList: MutableList<Track>) {
         val json = Gson().toJson(trackList)
-        sharedPreferences!!.edit()
+        sharedPreferences.edit()
             .putString(SEARCH_HISTORY, json)
             .apply()
     }
 
-    fun clear(){
-
-        sharedPreferences!!.edit()
+    fun clear(sharedPreferences: SharedPreferences){
+        sharedPreferences.edit()
             .remove(SEARCH_HISTORY)
             .apply()
 

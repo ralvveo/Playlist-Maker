@@ -77,10 +77,10 @@
 
             <EditText
                 android:id="@+id/input_edit_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="1"
-                android:maxLength="20"
+                android:maxLength="50"
                 android:hint="Поиск"
                 android:inputType="textNoSuggestions"
                 android:background="@android:color/transparent"
@@ -101,9 +101,9 @@
                 android:layout_height="@dimen/_12dp"
                 android:background="@drawable/cross_icon"
                 android:backgroundTint="@color/search_content_color"
-                android:layout_marginRight="@dimen/_8dp"
-                android:visibility="gone"
-                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/_10dp"
+                android:visibility="visible"
+                android:layout_gravity="center|end"
                 />
 
 

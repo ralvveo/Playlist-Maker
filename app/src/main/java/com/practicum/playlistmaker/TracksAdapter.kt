@@ -1,18 +1,18 @@
 package com.practicum.playlistmaker
 
-import android.app.Application
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.App.Companion.trackHistoryList
+
 
 class TracksAdapter(
     private val tracks: List<Track>
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
-    val searchHistory = SearchHistory(null)
+    //val intent = Intent(getBaseContext(), SearchActivity::class.java)
+
+    val searchHistory = SearchHistory()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)

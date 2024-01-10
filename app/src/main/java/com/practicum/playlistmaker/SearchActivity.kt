@@ -2,29 +2,21 @@ package com.practicum.playlistmaker
 
 
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.opengl.Visibility
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ContextUtils.getActivity
-
 import com.practicum.playlistmaker.App.Companion.trackHistoryList
 import retrofit2.Call
 import retrofit2.Callback
@@ -56,15 +48,13 @@ class SearchActivity : AppCompatActivity() {
         //Кнопка Назад
         val searchButtonBack = findViewById<ImageView>(R.id.search_button_back)
         searchButtonBack.setOnClickListener {
-
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finishAfterTransition()
         }
 
         val searchHistory = findViewById<ScrollView>(R.id.search_history)
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        val searchHistoryObject = SearchHistory(sharedPrefs)
-        trackHistoryList = searchHistoryObject.read()
+        val searchHistoryObject = SearchHistory()
+        trackHistoryList = searchHistoryObject.read(sharedPrefs)
         val trackHistoryAdapter = TracksAdapter(trackHistoryList)
         trackHistoryAdapter.notifyDataSetChanged()
 
@@ -96,12 +86,6 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-
-
-
-
-
-
         //Видимость Крестика в Поиске
         fun clearButtonVisibility(s: CharSequence?): Int {
 
@@ -115,6 +99,7 @@ class SearchActivity : AppCompatActivity() {
                 View.VISIBLE
             }
         }
+
         //Видимость Истории Поиска
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             searchHistory.visibility = if (hasFocus && inputEditText.text.isEmpty() && trackHistoryList.isNotEmpty()) View.VISIBLE else View.GONE
@@ -124,7 +109,7 @@ class SearchActivity : AppCompatActivity() {
 
         val clearHistoryButton = findViewById<Button>(R.id.search_history_button)
         clearHistoryButton.setOnClickListener{
-            searchHistoryObject.clear()
+            searchHistoryObject.clear(sharedPrefs)
             trackHistoryList.clear()
             trackHistoryAdapter.notifyDataSetChanged()
             searchHistory.visibility = View.GONE
@@ -153,19 +138,13 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
-
-
-
-
-
+        val placeholderError =  findViewById<LinearLayout>(R.id.search_error)
+        val placeholderErrorText = findViewById<TextView>(R.id.search_error_text)
+        val placeholderErrorImage = findViewById<ImageView>(R.id.search_error_image)
+        val placeholderErrorButton = findViewById<Button>(R.id.search_error_button)
 
         //Работа c Itunes Search Api
         fun goForApiSearch(){
-            val placeholderError =  findViewById<LinearLayout>(R.id.search_error)
-            val placeholderErrorText = findViewById<TextView>(R.id.search_error_text)
-            val placeholderErrorImage = findViewById<ImageView>(R.id.search_error_image)
-            val placeholderErrorButton = findViewById<Button>(R.id.search_error_button)
-
                 if (inputEditText.text.isNotEmpty()) {
                     itunesSearchService.search(inputEditText.text.toString()).enqueue(object :
                         Callback<TracksResponse> {
@@ -206,8 +185,6 @@ class SearchActivity : AppCompatActivity() {
 
                     })
                 }
-
-
         }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -220,41 +197,21 @@ class SearchActivity : AppCompatActivity() {
             goForApiSearch()
         }
 
-
-
-
-
-
-
-
-
     }
     val trackHistoryAdapter = TracksAdapter(trackHistoryList)
 
-
-
-
-
-
+    companion object {
+        const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val TEXT = ""
+    }
     //Сохранение введенного в Поиске Текста
     private var searchText = TEXT
-
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         searchText = inputEditText.text.toString()
         outState.putString(SEARCH_TEXT, searchText)
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        val searchHistoryObject = SearchHistory(sharedPrefs)
-        searchHistoryObject.write(trackHistoryList)
         trackHistoryAdapter.notifyDataSetChanged()
-
-    }
-
-    companion object {
-        const val SEARCH_TEXT = "SEARCH_TEXT"
-        const val TEXT = ""
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -262,14 +219,15 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString(SEARCH_TEXT, TEXT)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         inputEditText.setText(searchText)
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        val searchHistoryObject = SearchHistory(sharedPrefs)
-        trackHistoryList = searchHistoryObject.read()
         trackHistoryAdapter.notifyDataSetChanged()
     }
 
-
-
+    override fun onPause() {
+        super.onPause()
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistoryObject = SearchHistory()
+        searchHistoryObject.write(sharedPrefs, trackHistoryList)
+    }
 
 
 

@@ -2,11 +2,10 @@ package com.practicum.playlistmaker
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
@@ -21,9 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         //Кнопка Назад
         val settingsButtonBack = findViewById<ImageView>(R.id.settings_button_back)
         settingsButtonBack.setOnClickListener {
-
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         //Кнопка Поделиться приложением
