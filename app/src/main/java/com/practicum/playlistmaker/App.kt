@@ -11,22 +11,12 @@ const val SEARCH_HISTORY = "search_history"
 class App : Application() {
 
     private var darkTheme = false
-    private var searchHistoryString: String? = ""
-
-    companion object{
-        var trackHistoryList = mutableListOf<Track>()
-    }
-
 
     override fun onCreate(){
         super.onCreate()
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        val searchHistory = SearchHistory()
         darkTheme = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
-        searchHistoryString = sharedPrefs.getString(SEARCH_HISTORY, "")
         switchTheme(sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false))
-        trackHistoryList = searchHistory.read(sharedPrefs)
-
     }
 
 

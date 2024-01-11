@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 class TracksAdapter(
     private val tracks: List<Track>
 ) : RecyclerView.Adapter<TracksViewHolder> () {
-
-    //val intent = Intent(getBaseContext(), SearchActivity::class.java)
 
     val searchHistory = SearchHistory()
 

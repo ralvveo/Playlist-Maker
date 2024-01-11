@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker
 
-
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -17,7 +16,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.App.Companion.trackHistoryList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +26,12 @@ class SearchActivity : AppCompatActivity() {
 
     //Работа c Itunes Search Api
 
+    companion object {
+        const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val TEXT = ""
+        var trackHistoryList = mutableListOf<Track>() //История Поиска
+    }
+
     private val itunesSearchBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
@@ -36,9 +40,6 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesSearchService = retrofit.create(ItunesSearchApi::class.java)
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,16 +52,16 @@ class SearchActivity : AppCompatActivity() {
             finishAfterTransition()
         }
 
+        //Чтение Истории Поиска из Shared Preferences и отображение ее на экране
         val searchHistory = findViewById<ScrollView>(R.id.search_history)
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         val searchHistoryObject = SearchHistory()
+        val searchHistoryList = findViewById<RecyclerView>(R.id.search_history_list)
         trackHistoryList = searchHistoryObject.read(sharedPrefs)
         val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+        searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+        searchHistoryList.adapter = trackHistoryAdapter
         trackHistoryAdapter.notifyDataSetChanged()
-
-
-
-
 
 
         //Список Треков в Поиске
@@ -72,12 +73,7 @@ class SearchActivity : AppCompatActivity() {
         val trackAdapter = TracksAdapter(trackList)
         recyclerView.adapter = trackAdapter
 
-        //История Поиска
 
-        val searchHistoryList = findViewById<RecyclerView>(R.id.search_history_list)
-        searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
-        searchHistoryList.adapter = trackHistoryAdapter
-        trackHistoryAdapter.notifyDataSetChanged()
         clearButton.setOnClickListener {
             inputEditText.setText("")
             trackList.clear()
@@ -137,6 +133,7 @@ class SearchActivity : AppCompatActivity() {
                 // empty
             }
         }
+
         inputEditText.addTextChangedListener(simpleTextWatcher)
         val placeholderError =  findViewById<LinearLayout>(R.id.search_error)
         val placeholderErrorText = findViewById<TextView>(R.id.search_error_text)
@@ -198,12 +195,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
     }
-    val trackHistoryAdapter = TracksAdapter(trackHistoryList)
 
-    companion object {
-        const val SEARCH_TEXT = "SEARCH_TEXT"
-        const val TEXT = ""
-    }
     //Сохранение введенного в Поиске Текста
     private var searchText = TEXT
     override fun onSaveInstanceState(outState: Bundle) {
@@ -211,7 +203,6 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         searchText = inputEditText.text.toString()
         outState.putString(SEARCH_TEXT, searchText)
-        trackHistoryAdapter.notifyDataSetChanged()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -219,7 +210,6 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString(SEARCH_TEXT, TEXT)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         inputEditText.setText(searchText)
-        trackHistoryAdapter.notifyDataSetChanged()
     }
 
     override fun onPause() {
