@@ -2,24 +2,25 @@ package com.practicum.playlistmaker
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
 
         //Кнопка Назад
         val settingsButtonBack = findViewById<ImageView>(R.id.settings_button_back)
         settingsButtonBack.setOnClickListener {
-
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         //Кнопка Поделиться приложением
@@ -53,6 +54,38 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(settingsIntent)
         }
 
+        //Переключатель темы
 
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+
+
+        }
+
+
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+    }
+
+    //Фикс бага с мигающим экраном при смене темы
+    override fun recreate() {
+        finish()
+        overridePendingTransition(
+            R.anim.empty_animation,
+            R.anim.empty_animation
+        )
+        startActivity(intent)
+        overridePendingTransition(
+            R.anim.empty_animation,
+            R.anim.empty_animation
+        )
     }
 }
