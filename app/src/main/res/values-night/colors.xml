@@ -9,5 +9,7 @@
     <color name="search_content_color">#FF000000</color>
     <color name="search_content_color2">#FFFFFFFF</color>
     <color name="search_error_icon_color">#FFFFFFFF</color>
+    <color name="black_white">#FFFFFFFF</color>
+    <color name="white_black">#1A1B22</color>
 
 </resources>
