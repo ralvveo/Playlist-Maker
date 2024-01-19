@@ -63,4 +63,16 @@
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/search_content_color2</item>
     </style>
+
+    <style name="AudioplayerTrackInfoStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/grey2</item>
+    </style>
+
+    <style name="AudioplayerTrackInfoTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black_white</item>
+    </style>
 </resources>

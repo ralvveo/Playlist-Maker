@@ -1,6 +1,8 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
+import androidx.core.content.ContextCompat.startActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.SearchActivity.Companion.trackHistoryList
@@ -20,8 +22,8 @@ class SearchHistory() {
                 trackHistoryList.add(track)
             }
         }
-        val trackHistoryAdapter = TracksAdapter(trackHistoryList)
-        trackHistoryAdapter.notifyDataSetChanged()
+        //val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+        //trackHistoryAdapter.notifyDataSetChanged()
     }
 
     //Чтение Истории Поиска из Shared Preferences
