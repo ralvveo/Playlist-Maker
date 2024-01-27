@@ -48,7 +48,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_search)
+        setContentView(binding.root)
 
         //Кнопка Назад
         val searchButtonBack = findViewById<ImageView>(R.id.search_button_back)
