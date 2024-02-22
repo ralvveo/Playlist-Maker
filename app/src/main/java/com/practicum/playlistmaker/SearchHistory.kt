@@ -22,8 +22,8 @@ class SearchHistory() {
                 trackHistoryList.add(track)
             }
         }
-        //val trackHistoryAdapter = TracksAdapter(trackHistoryList)
-        //trackHistoryAdapter.notifyDataSetChanged()
+        val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+        trackHistoryAdapter.notifyDataSetChanged()
     }
 
     //Чтение Истории Поиска из Shared Preferences

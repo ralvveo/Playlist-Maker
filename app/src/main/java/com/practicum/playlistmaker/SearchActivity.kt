@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -10,12 +12,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,13 +25,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySearchBinding
+
     //Работа c Itunes Search Api
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT = ""
         var trackHistoryList = mutableListOf<Track>() //История Поиска
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
+
+
+
 
     private val itunesSearchBaseUrl = "https://itunes.apple.com"
 
@@ -44,7 +53,8 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //Кнопка Назад
         val searchButtonBack = findViewById<ImageView>(R.id.search_button_back)
@@ -111,20 +121,27 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.visibility = View.GONE
         }
 
+
+
+
+
+
         //Text Watcher
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                searchDebounce()
                 clearButton.visibility = clearButtonVisibility(s)
                 searchHistory.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true && trackHistoryList.isNotEmpty()) View.VISIBLE else View.GONE
                 trackHistoryAdapter.notifyDataSetChanged()
                 if (s?.isEmpty() == true){
                     trackList.clear()
                     trackAdapter.notifyDataSetChanged()
+                    binding.progressBar.visibility = View.GONE
+
                 }
 
             }
@@ -135,54 +152,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
-        val placeholderError =  findViewById<LinearLayout>(R.id.search_error)
-        val placeholderErrorText = findViewById<TextView>(R.id.search_error_text)
-        val placeholderErrorImage = findViewById<ImageView>(R.id.search_error_image)
-        val placeholderErrorButton = findViewById<Button>(R.id.search_error_button)
 
-        //Работа c Itunes Search Api
-        fun goForApiSearch(){
-                if (inputEditText.text.isNotEmpty()) {
-                    itunesSearchService.search(inputEditText.text.toString()).enqueue(object :
-                        Callback<TracksResponse> {
-                        override fun onResponse(call: Call<TracksResponse>,
-                                                response: Response<TracksResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                trackList.clear()
-                                if (response.body()?.results?.isNotEmpty() == true) {
-                                    trackList.addAll(response.body()?.results!!)
-                                    trackAdapter.notifyDataSetChanged()
-                                    placeholderError.visibility = View.GONE
-                                }
-                                if (trackList.isEmpty()) {
-                                    placeholderError.visibility = View.VISIBLE
-                                    placeholderErrorButton.visibility = View.GONE
-                                    placeholderErrorText.setText(R.string.nothing_found)
-                                    placeholderErrorImage.setBackgroundResource(R.drawable.nothing_found_icon)
-                                    trackList.clear()
-                                    trackAdapter.notifyDataSetChanged()
-                                }
-                            }
-                            else {
-                                placeholderError.visibility = View.VISIBLE
-                                placeholderErrorButton.visibility = View.VISIBLE
-                                placeholderErrorText.setText(R.string.no_internet_text)
-                                placeholderErrorImage.setBackgroundResource(R.drawable.no_internet_icon)
 
-                            }
-                        }
-
-                        override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                            placeholderError.visibility = View.VISIBLE
-                            placeholderErrorButton.visibility = View.VISIBLE
-                            placeholderErrorText.setText(R.string.no_internet_text)
-                            placeholderErrorImage.setBackgroundResource(R.drawable.no_internet_icon)
-                        }
-
-                    })
-                }
-        }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) goForApiSearch()
@@ -195,6 +166,9 @@ class SearchActivity : AppCompatActivity() {
         }
 
     }
+
+
+
 
     //Сохранение введенного в Поиске Текста
     private var searchText = TEXT
@@ -217,7 +191,90 @@ class SearchActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         val searchHistoryObject = SearchHistory()
         searchHistoryObject.write(sharedPrefs, trackHistoryList)
+
+
     }
+
+    override fun onResume() {
+        super.onResume()
+        //Чтение Истории Поиска из Shared Preferences и отображение ее на экране
+        val searchHistory = findViewById<ScrollView>(R.id.search_history)
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistoryObject = SearchHistory()
+        val searchHistoryList = findViewById<RecyclerView>(R.id.search_history_list)
+        trackHistoryList = searchHistoryObject.read(sharedPrefs)
+        val trackHistoryAdapter = TracksAdapter(trackHistoryList)
+        searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+        searchHistoryList.adapter = trackHistoryAdapter
+        trackHistoryAdapter.notifyDataSetChanged()
+    }
+
+
+
+    //Работа c Itunes Search Api
+    private fun goForApiSearch(){
+        binding.progressBar.visibility = View.VISIBLE
+        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val trackList: MutableList<Track> = mutableListOf()
+        val trackAdapter = TracksAdapter(trackList)
+        binding.recyclerView.adapter = trackAdapter
+        if (binding.inputEditText.text.isNotEmpty()) {
+            itunesSearchService.search(binding.inputEditText.text.toString()).enqueue(object :
+                Callback<TracksResponse> {
+                override fun onResponse(call: Call<TracksResponse>,
+                                        response: Response<TracksResponse>
+                ) {
+                    binding.progressBar.visibility = View.GONE
+                    if (response.code() == 200) {
+                        trackList.clear()
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            trackList.addAll(response.body()?.results!!)
+                            trackAdapter.notifyDataSetChanged()
+                            binding.searchError.visibility = View.GONE
+                        }
+                        if (trackList.isEmpty()) {
+                            binding.searchError.visibility = View.VISIBLE
+                            binding.searchErrorButton.visibility = View.GONE
+                            binding.searchErrorText.setText(R.string.nothing_found)
+                            binding.searchErrorImage.setBackgroundResource(R.drawable.nothing_found_icon)
+                            trackList.clear()
+                            trackAdapter.notifyDataSetChanged()
+                        }
+                    }
+                    else {
+                        binding.progressBar.visibility = View.GONE
+                        binding.searchError.visibility = View.VISIBLE
+                        binding.searchErrorButton.visibility = View.VISIBLE
+                        binding.searchErrorText.setText(R.string.no_internet_text)
+                        binding.searchErrorImage.setBackgroundResource(R.drawable.no_internet_icon)
+
+                    }
+                }
+
+                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    binding.progressBar.visibility = View.GONE
+                    binding.searchError.visibility = View.VISIBLE
+                    binding.searchErrorButton.visibility = View.VISIBLE
+                    binding.searchErrorText.setText(R.string.no_internet_text)
+                    binding.searchErrorImage.setBackgroundResource(R.drawable.no_internet_icon)
+                }
+
+            })
+        }
+        else{
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    //Реализация автоматического поиска через несколько секунд
+    val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable {goForApiSearch()}
+    fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+
 
 
 

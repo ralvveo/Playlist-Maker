@@ -166,7 +166,7 @@
         android:fontFamily="@font/ys_display_medium"
         android:textColor="@color/black_white"
         android:textSize="14sp"
-        android:text="0:30"
+        android:text="00:00"
         />
 
 
@@ -190,14 +190,13 @@
         android:id="@+id/audioplayer_center_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/audioplayer_center_button"
-        android:background="@null"
+        android:background="@drawable/audioplayer_center_button_play"
         app:layout_constraintStart_toEndOf="@id/audioplayer_left_button"
         app:layout_constraintEnd_toStartOf="@id/audioplayer_right_button"
         app:layout_constraintBottom_toTopOf="@id/track_current_time"
         android:layout_marginBottom="4dp"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
+
         />
 
     <ImageButton
