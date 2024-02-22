@@ -19,8 +19,6 @@ class App : Application() {
         switchTheme(sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false))
     }
 
-
-
     fun switchTheme(darkThemeEnabled: Boolean)  {
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         darkTheme = darkThemeEnabled

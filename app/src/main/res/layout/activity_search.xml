@@ -96,7 +96,7 @@
 
 
             <ImageView
-                android:id="@+id/clear_icon"
+                android:id="@+id/clear_button"
                 android:layout_width="@dimen/_12dp"
                 android:layout_height="@dimen/_12dp"
                 android:background="@drawable/cross_icon"

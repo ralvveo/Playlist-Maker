@@ -1,13 +1,14 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.data.repository
 
-import android.content.Intent
 import android.content.SharedPreferences
-import androidx.core.content.ContextCompat.startActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.SearchActivity.Companion.trackHistoryList
+import com.practicum.playlistmaker.SEARCH_HISTORY
+import com.practicum.playlistmaker.ui.SearchActivity.Companion.trackHistoryList
+import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.ui.TracksAdapter
 
-class SearchHistory() {
+object SearchHistory {
     //Добавление трека в Историю Поиска(без сохранения в Shared Preferences)
     fun addTrackToHistory(track: Track){
         if (track in trackHistoryList){

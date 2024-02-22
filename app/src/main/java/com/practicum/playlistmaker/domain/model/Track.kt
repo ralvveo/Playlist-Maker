@@ -1,7 +1,10 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.domain.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Track (
     val trackName: String,
     val artistName: String,

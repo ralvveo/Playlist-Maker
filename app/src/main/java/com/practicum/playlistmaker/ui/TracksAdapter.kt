@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 
 import android.content.Intent
@@ -7,7 +7,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.ui.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
+import com.practicum.playlistmaker.data.repository.SearchHistory
+import com.practicum.playlistmaker.domain.model.Track
+import kotlinx.serialization.*
+import kotlinx.serialization.json.Json
 
 
 class TracksAdapter(
@@ -17,7 +22,6 @@ class TracksAdapter(
     private var isClickAllowed = true
 
     private val handler = Handler(Looper.getMainLooper())
-    private val searchHistory = SearchHistory()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
@@ -40,8 +44,9 @@ class TracksAdapter(
                     displayIntent.putExtra("Genre", tracks[position].primaryGenreName)
                     displayIntent.putExtra("country", tracks[position].country)
                     displayIntent.putExtra("previewUrl", tracks[position].previewUrl)
+                    displayIntent.putExtra("trackJson", Json.encodeToString(tracks[position]))
                     context.startActivity(displayIntent)
-                    searchHistory.addTrackToHistory(tracks[position])
+                    SearchHistory.addTrackToHistory(tracks[position])
                 }
             }
 
