@@ -13,6 +13,7 @@ class App : Application() {
     private var darkTheme = false
 
     override fun onCreate(){
+
         super.onCreate()
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)

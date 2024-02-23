@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.network.ItunesSearchApi
 import com.practicum.playlistmaker.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.data.dto.TracksResponse
-import com.practicum.playlistmaker.data.repository.SearchHistory
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.domain.repository.SearchHistoryFunctions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-
+    private lateinit var searchHistory: SearchHistoryFunctions
     //Работа c Itunes Search Api
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
@@ -38,7 +39,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val itunesSearchBaseUrl = "https://itunes.apple.com"
-
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesSearchBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
@@ -51,15 +51,15 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        searchHistory = Creator.provideSearchHistoryFunctions(sharedPrefs)
         //Кнопка Назад
         binding.searchButtonBack.setOnClickListener {
             finishAfterTransition()
         }
 
         //Чтение Истории Поиска из Shared Preferences и отображение ее на экране
-        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        trackHistoryList = SearchHistory.read(sharedPrefs)
+        trackHistoryList = searchHistory.read()
         val trackHistoryAdapter = TracksAdapter(trackHistoryList)
         binding.searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         binding.searchHistoryList.adapter = trackHistoryAdapter
@@ -99,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.searchHistoryButton.setOnClickListener{
-            SearchHistory.clear(sharedPrefs)
+            searchHistory.clear()
             trackHistoryList.clear()
             trackHistoryAdapter.notifyDataSetChanged()
             binding.searchHistory.visibility = View.GONE
@@ -165,7 +165,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        SearchHistory.write(sharedPrefs, trackHistoryList)
+        searchHistory.write(trackHistoryList)
 
 
     }
@@ -174,7 +174,7 @@ class SearchActivity : AppCompatActivity() {
         super.onResume()
         //Чтение Истории Поиска из Shared Preferences и отображение ее на экране
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        trackHistoryList = SearchHistory.read(sharedPrefs)
+        trackHistoryList = searchHistory.read()
         val trackHistoryAdapter = TracksAdapter(trackHistoryList)
         binding.searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         binding.searchHistoryList.adapter = trackHistoryAdapter
