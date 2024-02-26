@@ -3,13 +3,16 @@ package com.practicum.playlistmaker.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityAudioplayerBinding
+import com.practicum.playlistmaker.domain.model.PlayerState
 import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.MediaplayerActivity
+import com.practicum.playlistmaker.domain.repository.MediaplayerRepository
+import com.practicum.playlistmaker.presentation.PlayerStateListenerImpl
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -17,16 +20,18 @@ import java.util.Locale
 class AudioplayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioplayerBinding
-    private lateinit var getMediaplayerActivity: MediaplayerActivity
+    private lateinit var getMediaplayerRepository: MediaplayerRepository
+    private lateinit var getPlayerStateListener: PlayerStateListenerImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getMediaplayerActivity = Creator.provideMediaplayer(binding)
+        getMediaplayerRepository = Creator.provideMediaplayer(binding)
+        getPlayerStateListener = PlayerStateListenerImpl()
         val trackJson = intent.getStringExtra("trackJson")
         val previewUrl  = Json.decodeFromString<Track>(trackJson!!).previewUrl
-        getMediaplayerActivity.preparePlayer(previewUrl = previewUrl)
+        getMediaplayerRepository.preparePlayer(previewUrl = previewUrl, listener = getPlayerStateListener)
         initializeActivityWithTrackInfo()
 
         //Кнопка Назад
@@ -36,7 +41,12 @@ class AudioplayerActivity : AppCompatActivity() {
 
         //Кнопка Воспроизведения
         binding.audioplayerCenterButton.setOnClickListener{
-            getMediaplayerActivity.playbackControl()
+            when (getMediaplayerRepository.getState()){
+                PlayerState.STATE_PLAYING -> binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_play)
+                PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_pause)
+                else -> {}
+            }
+            getMediaplayerRepository.playbackControl()
         }
 
 
@@ -45,12 +55,12 @@ class AudioplayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        getMediaplayerActivity.pausePlayer()
+        getMediaplayerRepository.pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        getMediaplayerActivity.release()
+        getMediaplayerRepository.release()
     }
 
 
@@ -78,8 +88,27 @@ class AudioplayerActivity : AppCompatActivity() {
             binding.trackAlbumText.visibility = View.GONE
             binding.trackAlbum.visibility = View.GONE
         }
+
     }
 
+
+
+    companion object {
+        fun changeCenterButton(changePicture: String) {
+            when (changePicture) {
+                "play" -> binding.audioplayerCenterButton.background = ContextCompat.getDrawable(
+                    binding.audioplayerCenterButton.context,
+                    R.drawable.audioplayer_center_button_play
+                )
+
+                "pause" -> binding.audioplayerCenterButton.background = ContextCompat.getDrawable(
+                    binding.audioplayerCenterButton.context,
+                    R.drawable.audioplayer_center_button_pause
+                )
+            }
+        }
+
+    }
 
 
 }

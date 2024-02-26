@@ -8,11 +8,13 @@ import androidx.core.content.ContextCompat
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityAudioplayerBinding
 import com.practicum.playlistmaker.domain.model.PlayerState
-import com.practicum.playlistmaker.domain.repository.MediaplayerActivity
+import com.practicum.playlistmaker.domain.repository.MediaplayerRepository
+
+import com.practicum.playlistmaker.presentation.PlayerStateListenerImpl
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-open class MediaplayerActivityImpl (val binding: ActivityAudioplayerBinding): AppCompatActivity(), MediaplayerActivity{
+open class MediaplayerRepositoryImpl (val binding: ActivityAudioplayerBinding): AppCompatActivity(), MediaplayerRepository{
     private var mediaPlayer: MediaPlayer = MediaPlayer()
     private var handler = Handler(Looper.getMainLooper())
     private var playerState: PlayerState = PlayerState.STATE_DEFAULT
@@ -24,7 +26,7 @@ open class MediaplayerActivityImpl (val binding: ActivityAudioplayerBinding): Ap
         const val DEFAULT_TIME = "00:00"
     }
 
-    override fun preparePlayer(previewUrl: String) {
+    override fun preparePlayer(previewUrl: String, listener: PlayerStateListenerImpl) {
         mediaPlayer.setDataSource(previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -33,24 +35,26 @@ open class MediaplayerActivityImpl (val binding: ActivityAudioplayerBinding): Ap
         }
         mediaPlayer.setOnCompletionListener {
             playerState = PlayerState.STATE_PREPARED
+            listener.changeStateExecute(playerState)
             binding.trackCurrentTime.text = DEFAULT_TIME
-            binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_play)
+            //binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_play)
             handler.removeCallbacksAndMessages(createUpdateTimerTask())
         }
+
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
         startTimer()
         playerState = PlayerState.STATE_PLAYING
-        binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_pause)
+
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
         handler.removeCallbacks(createUpdateTimerTask())
         playerState = PlayerState.STATE_PAUSED
-        binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_play)
+
     }
 
     override fun playbackControl() {
@@ -89,5 +93,13 @@ open class MediaplayerActivityImpl (val binding: ActivityAudioplayerBinding): Ap
                 }
             }
         }
+    }
+
+    override fun getState(): PlayerState{
+        return playerState
+    }
+
+    override fun setState(changedPlayerState: PlayerState){
+        playerState = changedPlayerState
     }
 }
