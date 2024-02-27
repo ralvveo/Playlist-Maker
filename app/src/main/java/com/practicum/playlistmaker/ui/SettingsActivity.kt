@@ -1,32 +1,33 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.DARK_THEME_INDICATOR
+import com.practicum.playlistmaker.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+        binding.themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
 
         //Кнопка Назад
-        val settingsButtonBack = findViewById<ImageView>(R.id.settings_button_back)
-        settingsButtonBack.setOnClickListener {
+        binding.settingsButtonBack.setOnClickListener {
             finish()
         }
 
         //Кнопка Поделиться приложением
-        val settingsButtonShare = findViewById<FrameLayout>(R.id.settings_button_share)
-        settingsButtonShare.setOnClickListener {
-
+        binding.settingsButtonShare.setOnClickListener {
             val shareMessage = getString(R.string.share_link)
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.setType("text/plain")
@@ -35,9 +36,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         //Кнопка Написать в поддержку
-        val settingsButtonSupport = findViewById<FrameLayout>(R.id.settings_button_support)
-        settingsButtonSupport.setOnClickListener {
-
+        binding.settingsButtonSupport.setOnClickListener {
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_message_address)))
@@ -47,32 +46,26 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         //Кнопка Пользовательское соглашение
-        val settingsButtonAssignment = findViewById<FrameLayout>(R.id.settings_button_assignment)
-        settingsButtonAssignment.setOnClickListener {
-
+        binding.settingsButtonAssignment.setOnClickListener {
             val settingsIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.assignment_link)))
             startActivity(settingsIntent)
         }
 
         //Переключатель темы
-
-
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        binding.themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
 
 
         }
 
-
-        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+        binding.themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
 
     }
 
     override fun onResume() {
         super.onResume()
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
         val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+        binding.themeSwitcher.isChecked = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
     }
 
     //Фикс бага с мигающим экраном при смене темы
