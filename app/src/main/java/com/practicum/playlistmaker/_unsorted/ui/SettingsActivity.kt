@@ -1,13 +1,13 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker._unsorted.ui
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.App
-import com.practicum.playlistmaker.DARK_THEME_INDICATOR
-import com.practicum.playlistmaker.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker._unsorted.App
+import com.practicum.playlistmaker._unsorted.DARK_THEME_INDICATOR
+import com.practicum.playlistmaker._unsorted.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {

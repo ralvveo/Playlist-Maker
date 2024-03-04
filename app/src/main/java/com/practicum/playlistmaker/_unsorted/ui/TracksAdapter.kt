@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker._unsorted.ui
 
 
 import android.content.Intent
@@ -8,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.ui.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
-import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.SearchHistoryFunctions
+import com.practicum.playlistmaker._unsorted.creator.Creator
+import com.practicum.playlistmaker._unsorted.ui.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
+import com.practicum.playlistmaker._unsorted_domain.model.Track
+import com.practicum.playlistmaker._unsorted_domain.repository.SearchHistoryFunctions
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 

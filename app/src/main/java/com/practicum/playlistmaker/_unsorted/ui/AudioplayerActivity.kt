@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker._unsorted.ui
 
 import android.os.Bundle
 import android.view.View
@@ -9,12 +9,12 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker._unsorted.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityAudioplayerBinding
-import com.practicum.playlistmaker.domain.model.PlayerState
-import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.MediaplayerRepository
-import com.practicum.playlistmaker.domain.repository.MyCallback
+import com.practicum.playlistmaker._unsorted_domain.model.PlayerState
+import com.practicum.playlistmaker._unsorted_domain.model.Track
+import com.practicum.playlistmaker._unsorted_domain.repository.MediaplayerRepository
+import com.practicum.playlistmaker._unsorted_domain.repository.MyCallback
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.Locale

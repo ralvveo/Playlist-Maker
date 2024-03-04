@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domain.model
+package com.practicum.playlistmaker._unsorted_domain.model
 
 //Все состояния медиаплеера
 enum class PlayerState{

@@ -1,13 +1,13 @@
-package com.practicum.playlistmaker.data.repository
+package com.practicum.playlistmaker._unsorted_data.repository
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.SEARCH_HISTORY
-import com.practicum.playlistmaker.ui.SearchActivity.Companion.trackHistoryList
-import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.SearchHistoryFunctions
-import com.practicum.playlistmaker.ui.TracksAdapter
+import com.practicum.playlistmaker._unsorted.SEARCH_HISTORY
+import com.practicum.playlistmaker._unsorted.ui.SearchActivity.Companion.trackHistoryList
+import com.practicum.playlistmaker._unsorted_domain.model.Track
+import com.practicum.playlistmaker._unsorted_domain.repository.SearchHistoryFunctions
+import com.practicum.playlistmaker._unsorted.ui.TracksAdapter
 
 class SearchHistoryFunctionsImpl(val sharedPrefs: SharedPreferences?) : SearchHistoryFunctions{
 

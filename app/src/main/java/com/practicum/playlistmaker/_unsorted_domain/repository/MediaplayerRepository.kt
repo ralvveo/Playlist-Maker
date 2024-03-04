@@ -1,6 +1,6 @@
-package com.practicum.playlistmaker.domain.repository
+package com.practicum.playlistmaker._unsorted_domain.repository
 
-import com.practicum.playlistmaker.domain.model.PlayerState
+import com.practicum.playlistmaker._unsorted_domain.model.PlayerState
 
 interface MediaplayerRepository {
     fun preparePlayer(previewUrl: String)

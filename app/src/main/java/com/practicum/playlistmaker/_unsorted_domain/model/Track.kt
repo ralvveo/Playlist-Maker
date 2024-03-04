@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domain.model
+package com.practicum.playlistmaker._unsorted_domain.model
 
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable

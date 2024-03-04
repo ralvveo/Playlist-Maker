@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker._unsorted.ui
 
 import android.view.View
 import android.widget.ImageView
@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker._unsorted_domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 

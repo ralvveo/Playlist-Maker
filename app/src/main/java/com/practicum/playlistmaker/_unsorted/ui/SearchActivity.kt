@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui
+package com.practicum.playlistmaker._unsorted.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -12,13 +12,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.data.network.ItunesSearchApi
-import com.practicum.playlistmaker.PLAYLIST_MAKER_PREFERENCES
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.data.dto.TracksResponse
+import com.practicum.playlistmaker._unsorted_data.network.ItunesSearchApi
+import com.practicum.playlistmaker._unsorted.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker._unsorted.creator.Creator
+import com.practicum.playlistmaker._unsorted_data.dto.TracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.SearchHistoryFunctions
+import com.practicum.playlistmaker._unsorted_domain.model.Track
+import com.practicum.playlistmaker._unsorted_domain.repository.SearchHistoryFunctions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

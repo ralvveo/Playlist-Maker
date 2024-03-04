@@ -1,6 +1,6 @@
-package com.practicum.playlistmaker.domain.repository
+package com.practicum.playlistmaker._unsorted_domain.repository
 
-import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker._unsorted_domain.model.Track
 
 interface SearchHistoryFunctions {
     fun addTrackToHistory(track: Track)

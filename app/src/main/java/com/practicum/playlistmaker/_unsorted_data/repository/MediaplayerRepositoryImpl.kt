@@ -1,11 +1,11 @@
-package com.practicum.playlistmaker.data.repository
+package com.practicum.playlistmaker._unsorted_data.repository
 
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import com.practicum.playlistmaker.domain.model.PlayerState
-import com.practicum.playlistmaker.domain.repository.MyCallback
-import com.practicum.playlistmaker.domain.repository.MediaplayerRepository
+import com.practicum.playlistmaker._unsorted_domain.model.PlayerState
+import com.practicum.playlistmaker._unsorted_domain.repository.MyCallback
+import com.practicum.playlistmaker._unsorted_domain.repository.MediaplayerRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 
