@@ -9,24 +9,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.databinding.TrackItemBinding
 import com.practicum.playlistmaker.ui.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.domain.repository.SearchHistoryFunctions
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 
-class TracksAdapter(
-    private val tracks: List<Track>
-) : RecyclerView.Adapter<TracksViewHolder> () {
+class TracksAdapter(private val tracks: List<Track>) : RecyclerView.Adapter<TracksViewHolder> () {
 
     private var isClickAllowed = true
     private lateinit var searchHistory: SearchHistoryFunctions
     private val handler = Handler(Looper.getMainLooper())
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-            searchHistory = Creator.provideSearchHistoryFunctions(null) //Тут экземлпяр SharedPrefs не требуется, не происходит работы с ними, поэтому null!
-        return TracksViewHolder(view)
+            val layoutInspector = LayoutInflater.from(parent.context)
+            searchHistory = Creator.provideSearchHistoryFunctions(null)
+            return TracksViewHolder(TrackItemBinding.inflate(layoutInspector, parent, false))//Тут экземлпяр SharedPrefs не требуется, не происходит работы с ними, поэтому null!
+
     }
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
