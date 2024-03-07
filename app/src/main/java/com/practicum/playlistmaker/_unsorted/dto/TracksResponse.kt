@@ -1,6 +1,6 @@
-package com.practicum.playlistmaker._unsorted_data.dto
+package com.practicum.playlistmaker._unsorted.dto
 
-import com.practicum.playlistmaker._unsorted_domain.model.Track
+import com.practicum.playlistmaker.player.domain.model.Track
 
 class TracksResponse(val searchType: String,
                      val expression: String,

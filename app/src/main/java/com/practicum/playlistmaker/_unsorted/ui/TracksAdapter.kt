@@ -8,10 +8,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker._unsorted.creator.Creator
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker._unsorted.ui.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
-import com.practicum.playlistmaker._unsorted_domain.model.Track
-import com.practicum.playlistmaker._unsorted_domain.repository.SearchHistoryFunctions
+import com.practicum.playlistmaker.player.domain.model.Track
+import com.practicum.playlistmaker._unsorted.repository.SearchHistoryFunctions
+import com.practicum.playlistmaker.player.ui.activity.AudioplayerActivity
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 

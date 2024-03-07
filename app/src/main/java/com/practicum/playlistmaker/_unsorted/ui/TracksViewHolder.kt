@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker._unsorted_domain.model.Track
+import com.practicum.playlistmaker.player.domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 

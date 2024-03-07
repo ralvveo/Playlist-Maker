@@ -1,15 +1,14 @@
-package com.practicum.playlistmaker._unsorted_data.repository
+package com.practicum.playlistmaker._unsorted.repository
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker._unsorted.SEARCH_HISTORY
 import com.practicum.playlistmaker._unsorted.ui.SearchActivity.Companion.trackHistoryList
-import com.practicum.playlistmaker._unsorted_domain.model.Track
-import com.practicum.playlistmaker._unsorted_domain.repository.SearchHistoryFunctions
+import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker._unsorted.ui.TracksAdapter
 
-class SearchHistoryFunctionsImpl(val sharedPrefs: SharedPreferences?) : SearchHistoryFunctions{
+class SearchHistoryFunctionsImpl(val sharedPrefs: SharedPreferences?) : SearchHistoryFunctions {
 
 
     //Добавление трека в Историю Поиска(без сохранения в Shared Preferences)

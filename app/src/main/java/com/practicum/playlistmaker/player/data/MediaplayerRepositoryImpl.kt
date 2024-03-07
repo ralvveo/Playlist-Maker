@@ -1,30 +1,29 @@
-package com.practicum.playlistmaker._unsorted_data.repository
+package com.practicum.playlistmaker.player.data
 
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import com.practicum.playlistmaker._unsorted_domain.model.PlayerState
-import com.practicum.playlistmaker._unsorted_domain.repository.MyCallback
-import com.practicum.playlistmaker._unsorted_domain.repository.MediaplayerRepository
+import com.practicum.playlistmaker.player.domain.model.PlayStatus
+import com.practicum.playlistmaker.player.domain.repository.MediaplayerRepository
+import com.practicum.playlistmaker.player.domain.repository.MyCallback
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepository{
+open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepository {
     private var mediaPlayer: MediaPlayer = MediaPlayer()
     private var handler = Handler(Looper.getMainLooper())
-    private var playerState: PlayerState = PlayerState.STATE_DEFAULT
+    private var playStatus: PlayStatus = PlayStatus(progress = DEFAULT_TIME, isPlaying = false)
 
     override fun preparePlayer(previewUrl: String) {
         mediaPlayer.setDataSource(previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            callback.execute("MakeButtonEnabled")
-            playerState = PlayerState.STATE_PREPARED
+            playStatus = PlayStatus(progress = DEFAULT_TIME, isPlaying = false)
         }
         mediaPlayer.setOnCompletionListener {
-            playerState = PlayerState.STATE_PREPARED
-            callback.execute("СhangeButtonToPlay")
-            callback.execute("SetDefaultTime")
+            playStatus = PlayStatus(progress = DEFAULT_TIME, isPlaying = false)
+            callback.execute("Play")
+            callback.execute("TrackFinished")
             handler.removeCallbacksAndMessages(createUpdateTimerTask())
         }
 
@@ -33,26 +32,27 @@ open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepo
     override fun startPlayer() {
         mediaPlayer.start()
         startTimer()
-        playerState = PlayerState.STATE_PLAYING
+        playStatus.isPlaying = true
+        callback.execute("Play")
 
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
         handler.removeCallbacks(createUpdateTimerTask())
-        playerState = PlayerState.STATE_PAUSED
+        playStatus.isPlaying = false
+        callback.execute("Pause")
 
     }
 
     override fun playbackControl() {
-        when(playerState) {
-            PlayerState.STATE_PLAYING -> {
+        when(playStatus.isPlaying) {
+            true -> {
                 pausePlayer()
             }
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
+            false -> {
                 startPlayer()
             }
-            else -> {}
         }
     }
 
@@ -67,14 +67,14 @@ open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepo
     private fun createUpdateTimerTask() : Runnable{
         return object: Runnable{
             override fun run() {
-                if (playerState == PlayerState.STATE_PLAYING){
+                if (playStatus.isPlaying){
                     val elapsedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
                     if (mediaPlayer.currentPosition < SONGS_DURATION_TIME){
                         callback.execute(elapsedTime)
                         handler.postDelayed(this, TIMER_UPDATE_TIME)
                     }
                     else{
-                        callback.execute("SetDefaultTime")
+                        callback.execute("TrackFinished")
 
                     }
                 }
@@ -82,16 +82,17 @@ open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepo
         }
     }
 
-    override fun getState(): PlayerState{
-        return playerState
+    override fun getStatus(): PlayStatus {
+        return playStatus
     }
 
-    override fun setState(changedPlayerState: PlayerState){
-        playerState = changedPlayerState
+    override fun setStatus(changedPlayStatus: PlayStatus){
+        playStatus = changedPlayStatus
     }
 
     //Constants
     companion object{
+        const val DEFAULT_TIME = "00:00"
         const val TIMER_UPDATE_TIME = 500L
         const val SONGS_DURATION_TIME = 30000
     }

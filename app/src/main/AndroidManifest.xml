@@ -23,10 +23,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
-            android:name="._unsorted.ui.SettingsActivity"
+            android:name=".settings.ui.activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name="._unsorted.ui.AudioplayerActivity"
+            android:name=".player.ui.activity.AudioplayerActivity"
             android:exported="false" />
         <activity
             android:name="._unsorted.ui.MainActivity"

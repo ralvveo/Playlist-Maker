@@ -1,6 +1,6 @@
-package com.practicum.playlistmaker._unsorted_data.network
+package com.practicum.playlistmaker._unsorted.network
 
-import com.practicum.playlistmaker._unsorted_data.dto.TracksResponse
+import com.practicum.playlistmaker._unsorted.dto.TracksResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
