@@ -1,9 +1,8 @@
-package com.practicum.playlistmaker._unsorted.repository
+package com.practicum.playlistmaker.search.domain.repository
 
 import com.practicum.playlistmaker.player.domain.model.Track
 
-interface SearchHistoryFunctions {
-    fun addTrackToHistory(track: Track)
+interface SearchHistoryFunctionsRepository {
     fun read(): MutableList<Track>
     fun write(trackList: MutableList<Track>)
     fun clear()

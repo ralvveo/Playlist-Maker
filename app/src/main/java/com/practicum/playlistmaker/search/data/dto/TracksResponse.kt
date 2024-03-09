@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker._unsorted.dto
+package com.practicum.playlistmaker.search.data.dto
 
 import com.practicum.playlistmaker.player.domain.model.Track
 

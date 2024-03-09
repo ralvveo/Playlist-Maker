@@ -1,14 +1,16 @@
-package com.practicum.playlistmaker._unsorted.ui
+package com.practicum.playlistmaker.search.ui.activity
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.model.Track
+import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,6 +20,7 @@ class TracksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.trackItemName)
     private val trackArtistName: TextView = itemView.findViewById(R.id.trackItemArtistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackItemTime)
+
 
 
     fun bind(model: Track) {

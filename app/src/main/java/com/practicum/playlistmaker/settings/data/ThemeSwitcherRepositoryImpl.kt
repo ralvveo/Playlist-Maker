@@ -21,6 +21,19 @@ class ThemeSwitcherRepositoryImpl(val context: Context) : ThemeSwitcherRepositor
             }
         )
     }
+
+    override fun setTheme(){
+        val sharedPrefs = context.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, Application.MODE_PRIVATE)
+        val currentTheme = sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (currentTheme) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
+    }
+
     override fun getTheme(): Boolean{
         val sharedPrefs = context.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, Application.MODE_PRIVATE)
         return sharedPrefs.getBoolean(DARK_THEME_INDICATOR, false)

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker._unsorted.ui
+package com.practicum.playlistmaker.media.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

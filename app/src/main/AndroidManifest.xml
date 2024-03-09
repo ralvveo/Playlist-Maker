@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name="._unsorted.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,10 +15,10 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name="._unsorted.ui.MediaActivity"
+            android:name=".media.ui.activity.MediaActivity"
             android:exported="false" />
         <activity
-            android:name="._unsorted.ui.SearchActivity"
+            android:name=".search.ui.activity.SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
@@ -29,7 +28,7 @@
             android:name=".player.ui.activity.AudioplayerActivity"
             android:exported="false" />
         <activity
-            android:name="._unsorted.ui.MainActivity"
+            android:name=".main.ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

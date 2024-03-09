@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker._unsorted.ui
+package com.practicum.playlistmaker.search.ui.activity
 
 
 import android.content.Intent
@@ -8,25 +8,25 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker._unsorted.ui.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
+import com.practicum.playlistmaker.search.ui.activity.SearchActivity.Companion.CLICK_DEBOUNCE_DELAY
 import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker._unsorted.repository.SearchHistoryFunctions
 import com.practicum.playlistmaker.player.ui.activity.AudioplayerActivity
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 
 class TracksAdapter(
-    private val tracks: List<Track>
+    private val onItemClick: ((track: Track) -> Unit)
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
+    private var tracks: MutableList<Track> = mutableListOf()
+    fun setTrackList(trackList: MutableList<Track>){
+        tracks = trackList
+    }
     private var isClickAllowed = true
-    private lateinit var searchHistory: SearchHistoryFunctions
     private val handler = Handler(Looper.getMainLooper())
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-            searchHistory = Creator.provideSearchHistoryFunctions(null) //Тут экземлпяр SharedPrefs не требуется, не происходит работы с ними, поэтому null!
         return TracksViewHolder(view)
     }
 
@@ -38,10 +38,9 @@ class TracksAdapter(
                     val displayIntent = Intent(context, AudioplayerActivity::class.java)
                     displayIntent.putExtra("trackJson", Json.encodeToString(tracks[position]))
                     context.startActivity(displayIntent)
-                    searchHistory.addTrackToHistory(tracks[position])
+                    onItemClick(tracks[position])
                 }
             }
-
     }
 
     override fun getItemCount(): Int {
@@ -56,5 +55,4 @@ class TracksAdapter(
         }
         return current
     }
-
 }
