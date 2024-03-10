@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.media.ui.activity.MediaActivity
 import com.practicum.playlistmaker.search.ui.activity.SearchActivity
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
@@ -21,7 +22,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, MainViewModel.factory(this))[MainViewModel::class.java]
+
+        viewModel = ViewModelProvider(this, MainViewModel.factory())[MainViewModel::class.java]
 
         binding.searchButton.setOnClickListener {
             val displayIntent = Intent(this, SearchActivity::class.java)

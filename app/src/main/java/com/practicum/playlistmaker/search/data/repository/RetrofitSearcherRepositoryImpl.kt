@@ -6,6 +6,7 @@ import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
 import com.practicum.playlistmaker.search.data.dto.TracksResponse
 import com.practicum.playlistmaker.search.data.network.ItunesSearchApi
+import com.practicum.playlistmaker.search.domain.model.RetrofitCallback
 import com.practicum.playlistmaker.search.domain.repository.RetrofitSearcherRepository
 import retrofit2.Call
 import retrofit2.Callback

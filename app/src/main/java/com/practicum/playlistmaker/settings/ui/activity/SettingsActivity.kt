@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this, SettingsViewModel.factory(context = this))[SettingsViewModel::class.java]
+        viewModel = ViewModelProvider(this, SettingsViewModel.factory())[SettingsViewModel::class.java]
         //Кнопка Назад
         binding.settingsButtonBack.setOnClickListener {
             finish()

@@ -1,25 +1,24 @@
 package com.practicum.playlistmaker.main.ui.view_model
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 
-class MainViewModel(context: Context) : ViewModel() {
+class MainViewModel() : ViewModel() {
 
-    private val themeSwitcher = Creator.provideThemeSwitcher(context = context)
+    private val themeSwitcherInteractor = Creator.provideThemeSwitcherInteractor()
 
     init{
-        themeSwitcher.setTheme()
+        themeSwitcherInteractor.setTheme()
     }
 
     companion object {
-        fun factory(context: Context): ViewModelProvider.Factory {
+        fun factory(): ViewModelProvider.Factory {
             return viewModelFactory {
                 initializer {
-                    MainViewModel(context)
+                    MainViewModel()
                 }
             }
         }

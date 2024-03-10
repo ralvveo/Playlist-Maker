@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.player.domain.repository.MyCallback
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepository {
+class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepository {
     private var mediaPlayer: MediaPlayer = MediaPlayer()
     private var handler = Handler(Looper.getMainLooper())
     private var playStatus: PlayStatus = PlayStatus(progress = DEFAULT_TIME, isPlaying = false)
@@ -82,13 +82,7 @@ open class MediaplayerRepositoryImpl (val callback: MyCallback): MediaplayerRepo
         }
     }
 
-    override fun getStatus(): PlayStatus {
-        return playStatus
-    }
 
-    override fun setStatus(changedPlayStatus: PlayStatus){
-        playStatus = changedPlayStatus
-    }
 
     //Constants
     companion object{

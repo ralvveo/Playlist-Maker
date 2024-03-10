@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker.search.data.model.SearchState
+import com.practicum.playlistmaker.search.domain.state.SearchState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 
 class SearchActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this, SearchViewModel.factory(this))[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(this, SearchViewModel.factory())[SearchViewModel::class.java]
         trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
         binding.searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

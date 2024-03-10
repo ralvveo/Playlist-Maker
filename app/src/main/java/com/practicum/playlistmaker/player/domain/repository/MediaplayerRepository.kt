@@ -9,6 +9,4 @@ interface MediaplayerRepository {
     fun pausePlayer()
     fun release()
     fun playbackControl()
-    fun getStatus(): PlayStatus
-    fun setStatus(changedPlayStatus: PlayStatus)
 }

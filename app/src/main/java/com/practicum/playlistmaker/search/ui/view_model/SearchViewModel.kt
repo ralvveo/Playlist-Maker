@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.search.ui.view_model
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,16 +9,16 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
-import com.practicum.playlistmaker.search.data.model.SearchState
-import com.practicum.playlistmaker.search.data.repository.RetrofitCallback
+import com.practicum.playlistmaker.search.domain.state.SearchState
+import com.practicum.playlistmaker.search.domain.model.RetrofitCallback
 
-class SearchViewModel(context: Context) : ViewModel(), MyCallback, RetrofitCallback {
+class SearchViewModel : ViewModel(), MyCallback, RetrofitCallback {
 
     private val searchHistoryLiveData = MutableLiveData<MutableList<Track>>()
     private val searchLiveData = MutableLiveData<MutableList<Track>>()
     private val state = MutableLiveData<SearchState>()
-    private val searchHistoryRepository = Creator.provideSearchHistoryFunctions(context = context)
-    private val retrofitSearcher = Creator.provideRetrofitSearcher(callback = this, retrofitCallback = this)
+    private val searchHistoryRepositoryInteractor = Creator.provideSearchHistoryFunctionsInteractor()
+    private val retrofitSearcherInteractor = Creator.provideRetrofitSearcherInteractor(callback = this, retrofitCallback = this)
     fun getState(): LiveData<SearchState> = state
 
     fun getSearchHistoryLiveData(): LiveData<MutableList<Track>> = searchHistoryLiveData
@@ -56,7 +55,7 @@ class SearchViewModel(context: Context) : ViewModel(), MyCallback, RetrofitCallb
     }
 
     private fun read(){
-        searchHistoryLiveData.value = searchHistoryRepository.read()
+        searchHistoryLiveData.value = searchHistoryRepositoryInteractor.read()
     }
 
     fun stateHistoryContent(){
@@ -75,22 +74,22 @@ class SearchViewModel(context: Context) : ViewModel(), MyCallback, RetrofitCallb
 
     fun clearHistory(){
         searchHistoryLiveData.value = mutableListOf()
-        searchHistoryRepository.clear()
+        searchHistoryRepositoryInteractor.clear()
         state.value = SearchState.HistoryContent(getCurrentSearchHistory())
     }
 
     private fun write(){
-        searchHistoryRepository.write(getCurrentSearchHistory())
+        searchHistoryRepositoryInteractor.write(getCurrentSearchHistory())
     }
 
     fun searchDebounce(searchText: String){
-        retrofitSearcher.setSearchText(searchText)
-        retrofitSearcher.searchDebounce()
+        retrofitSearcherInteractor.setSearchText(searchText)
+        retrofitSearcherInteractor.searchDebounce()
     }
 
     fun goForApiSearch(searchText: String){
-        retrofitSearcher.setSearchText(searchText)
-        retrofitSearcher.goForApiSearch()
+        retrofitSearcherInteractor.setSearchText(searchText)
+        retrofitSearcherInteractor.goForApiSearch()
     }
 
     override fun execute(message: String) {
@@ -107,10 +106,10 @@ class SearchViewModel(context: Context) : ViewModel(), MyCallback, RetrofitCallb
     }
 
     companion object {
-        fun factory(context: Context): ViewModelProvider.Factory {
+        fun factory(): ViewModelProvider.Factory {
             return viewModelFactory {
                 initializer {
-                    SearchViewModel(context)
+                    SearchViewModel()
                 }
             }
         }

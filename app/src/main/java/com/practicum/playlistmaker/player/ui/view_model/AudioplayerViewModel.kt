@@ -13,26 +13,27 @@ import com.practicum.playlistmaker.player.domain.repository.MyCallback
 class AudioplayerViewModel(trackId: String): ViewModel(), MyCallback {
 
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
-    private val mediaplayer = Creator.provideMediaplayer(callback = this)
+    //private val mediaplayer = Creator.provideMediaplayer(callback = this)
+    private val mediaplayerInteractor = Creator.provideMediaplayerInteractor(callback = this)
     fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
     private fun getCurrentPlayStatus(): PlayStatus {
         return playStatusLiveData.value ?: PlayStatus(progress = DEFAULT_TIME, isPlaying = false)
     }
 
     init{
-        mediaplayer.preparePlayer(trackId)
+        mediaplayerInteractor.preparePlayer(trackId)
     }
 
     fun playButtonClick(){
-        mediaplayer.playbackControl()
+        mediaplayerInteractor.playbackControl()
     }
 
     fun pause(){
-        mediaplayer.pausePlayer()
+        mediaplayerInteractor.pausePlayer()
     }
 
     fun release(){
-        mediaplayer.release()
+        mediaplayerInteractor.release()
     }
     override fun execute(message: String) {
         when (message){

@@ -1,42 +1,41 @@
 package com.practicum.playlistmaker.settings.ui.view_model
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 
-class SettingsViewModel(context: Context) : ViewModel(){
+class SettingsViewModel : ViewModel(){
 
-    private val shareLinksOpener = Creator.provideShareLinksOpener(context = context)
-    private val themeSwitcher = Creator.provideThemeSwitcher(context = context)
+    private val shareLinksOpenerInteractor = Creator.provideShareLinksOpenerInteractor()
+    private val themeSwitcherInteractor = Creator.provideThemeSwitcherInteractor()
 
     fun shareApp(){
-        shareLinksOpener.shareApp()
+        shareLinksOpenerInteractor.shareApp()
     }
 
     fun openTerms(){
-        shareLinksOpener.openTerms()
+        shareLinksOpenerInteractor.openTerms()
     }
 
     fun openSupport(){
-        shareLinksOpener.openSupport()
+        shareLinksOpenerInteractor.openSupport()
     }
 
     fun getTheme() : Boolean{
-        return themeSwitcher.getTheme()
+        return themeSwitcherInteractor.getTheme()
     }
 
     fun switchTheme(){
-        themeSwitcher.switchTheme()
+        themeSwitcherInteractor.switchTheme()
     }
 
     companion object {
-        fun factory(context: Context): ViewModelProvider.Factory {
+        fun factory(): ViewModelProvider.Factory {
             return viewModelFactory {
                 initializer {
-                    SettingsViewModel(context)
+                    SettingsViewModel()
                 }
             }
         }
