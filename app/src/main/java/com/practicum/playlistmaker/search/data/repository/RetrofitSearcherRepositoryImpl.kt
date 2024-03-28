@@ -11,19 +11,10 @@ import com.practicum.playlistmaker.search.domain.repository.RetrofitSearcherRepo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitSearcherRepositoryImpl(val callback: MyCallback, val retrofitCallback: RetrofitCallback) : RetrofitSearcherRepository {
+class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi, val callback: MyCallback, val retrofitCallback: RetrofitCallback) : RetrofitSearcherRepository {
 
-    //Работа c Itunes Search Api
-    private val itunesSearchBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesSearchBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 
-    private val itunesSearchService = retrofit.create(ItunesSearchApi::class.java)
 
     //Работа c Itunes Search Api
     override fun goForApiSearch(){

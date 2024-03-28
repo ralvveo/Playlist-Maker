@@ -1,15 +1,15 @@
 package com.practicum.playlistmaker.settings.ui.view_model
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.settings.domain.ThemeSwitcherInteractor
+import com.practicum.playlistmaker.sharing.domain.ShareLinksOpenerInteractor
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class SettingsViewModel : ViewModel(){
+class SettingsViewModel : ViewModel(), KoinComponent{
 
-    private val shareLinksOpenerInteractor = Creator.provideShareLinksOpenerInteractor()
-    private val themeSwitcherInteractor = Creator.provideThemeSwitcherInteractor()
+    private val shareLinksOpenerInteractor: ShareLinksOpenerInteractor by inject()
+    private val themeSwitcherInteractor: ThemeSwitcherInteractor by inject()
 
     fun shareApp(){
         shareLinksOpenerInteractor.shareApp()
@@ -31,13 +31,4 @@ class SettingsViewModel : ViewModel(){
         themeSwitcherInteractor.switchTheme()
     }
 
-    companion object {
-        fun factory(): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    SettingsViewModel()
-                }
-            }
-        }
-    }
 }

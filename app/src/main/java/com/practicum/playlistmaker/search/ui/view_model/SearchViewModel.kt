@@ -3,24 +3,29 @@ package com.practicum.playlistmaker.search.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
-import com.practicum.playlistmaker.search.domain.state.SearchState
+import com.practicum.playlistmaker.search.domain.RetrofitSearcherInteractor
+import com.practicum.playlistmaker.search.domain.SearchHistoryFunctionsInteractor
 import com.practicum.playlistmaker.search.domain.model.RetrofitCallback
+import com.practicum.playlistmaker.search.domain.state.SearchState
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 
-class SearchViewModel : ViewModel(), MyCallback, RetrofitCallback {
+
+class SearchViewModel : ViewModel(), MyCallback, RetrofitCallback, KoinComponent {
 
     private val searchHistoryLiveData = MutableLiveData<MutableList<Track>>()
     private val searchLiveData = MutableLiveData<MutableList<Track>>()
     private val state = MutableLiveData<SearchState>()
-    private val searchHistoryRepositoryInteractor = Creator.provideSearchHistoryFunctionsInteractor()
-    private val retrofitSearcherInteractor = Creator.provideRetrofitSearcherInteractor(callback = this, retrofitCallback = this)
+    private val searchHistoryRepositoryInteractor: SearchHistoryFunctionsInteractor by inject(){
+        parametersOf(this)
+    }
+    private val retrofitSearcherInteractor: RetrofitSearcherInteractor by inject() {
+        parametersOf(this,this)
+    }
     fun getState(): LiveData<SearchState> = state
-
     fun getSearchHistoryLiveData(): LiveData<MutableList<Track>> = searchHistoryLiveData
     private fun getCurrentSearchHistory(): MutableList<Track> {
         return searchHistoryLiveData.value ?: mutableListOf()
@@ -105,13 +110,4 @@ class SearchViewModel : ViewModel(), MyCallback, RetrofitCallback {
         searchLiveData.value = trackList
     }
 
-    companion object {
-        fun factory(): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    SearchViewModel()
-                }
-            }
-        }
-    }
 }

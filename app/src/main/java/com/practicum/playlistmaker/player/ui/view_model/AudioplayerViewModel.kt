@@ -3,18 +3,19 @@ package com.practicum.playlistmaker.player.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.MediaplayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 
-class AudioplayerViewModel(trackId: String): ViewModel(), MyCallback {
+class AudioplayerViewModel(trackId: String): ViewModel(), MyCallback, KoinComponent {
 
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
-    //private val mediaplayer = Creator.provideMediaplayer(callback = this)
-    private val mediaplayerInteractor = Creator.provideMediaplayerInteractor(callback = this)
+    private val mediaplayerInteractor: MediaplayerInteractor by inject() {
+        parametersOf(this)
+    }
     fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
     private fun getCurrentPlayStatus(): PlayStatus {
         return playStatusLiveData.value ?: PlayStatus(progress = DEFAULT_TIME, isPlaying = false)
@@ -46,13 +47,6 @@ class AudioplayerViewModel(trackId: String): ViewModel(), MyCallback {
 
 
     companion object {
-        fun factory(trackId: String): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    AudioplayerViewModel(trackId)
-                }
-            }
-        }
         const val DEFAULT_TIME = "00:00"
     }
 }

@@ -13,21 +13,26 @@ import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.view_model.AudioplayerViewModel
 import kotlinx.serialization.json.Json
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioplayerActivity : AppCompatActivity(){
+class AudioplayerActivity : AppCompatActivity(), KoinComponent{
 
     private lateinit var binding: ActivityAudioplayerBinding
-    private lateinit var viewModel: AudioplayerViewModel
+    private lateinit var previewUrl: String
+    private val viewModel: AudioplayerViewModel by inject{
+        parametersOf(previewUrl)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val trackJson = intent.getStringExtra("trackJson")
-        val previewUrl  = Json.decodeFromString<Track>(trackJson!!).previewUrl
-        viewModel = ViewModelProvider(this, AudioplayerViewModel.factory(trackId = previewUrl))[AudioplayerViewModel::class.java]
+        previewUrl  = Json.decodeFromString<Track>(trackJson!!).previewUrl
         initializeActivityWithTrackInfo()
         viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
             changeButtonStyle(playStatus)
