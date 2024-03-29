@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.practicum.playlistmaker"
-        minSdk = 29
+        minSdk = 33
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -39,8 +39,8 @@ android {
     }
 }
 
+val koinVersion = "3.2.2"
 dependencies {
-
     implementation ("androidx.core:core-ktx:1.9.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("com.google.android.material:material:1.9.0")
@@ -54,5 +54,9 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation ("io.insert-koin:koin-android:$koinVersion")
+    implementation ("io.insert-koin:koin-core:$koinVersion")
+
+
 
 }

@@ -102,7 +102,7 @@
                 android:background="@drawable/cross_icon"
                 android:backgroundTint="@color/search_content_color"
                 android:layout_marginRight="@dimen/_10dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_gravity="center|end"
                 />
 
