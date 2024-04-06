@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/settings_bg"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.practicum.playlistmaker.settings.ui.fragment.SettingsFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,18 +19,7 @@
         android:layout_marginBottom="24dp"
         >
 
-        <ImageView
-            android:id="@+id/settings_button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/arrow_back"
-            android:layout_gravity="center|start"
-            app:backgroundTint="@color/settings_arrowback"
-            android:layout_marginRight="@dimen/_12dp"
-            android:layout_marginTop="@dimen/_12dp"
-            android:layout_marginBottom="@dimen/_12dp"
-            android:foreground="?attr/selectableItemBackground"
-            />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +32,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_12dp"
             android:layout_marginBottom="@dimen/_12dp"
-            android:layout_marginLeft="@dimen/_12dp"
+
             />
 
     </LinearLayout>
@@ -70,7 +60,7 @@
             android:paddingRight="@dimen/_12dp"
             android:paddingTop="@dimen/_22dp"
             android:paddingBottom="@dimen/_22dp"
-             />
+            />
 
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

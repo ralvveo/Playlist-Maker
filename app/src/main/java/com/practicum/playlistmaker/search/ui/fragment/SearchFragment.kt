@@ -1,35 +1,42 @@
-package com.practicum.playlistmaker.search.ui.activity
+package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.search.domain.state.SearchState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<SearchViewModel>()
     private lateinit var trackHistoryAdapter: TracksAdapter
     private lateinit var trackAdapter: TracksAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
-        binding.searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
-        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.searchHistoryList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val trackAdapter = TracksAdapter(viewModel::addTrackToHistory)
         binding.recyclerView.adapter = trackAdapter
 
@@ -45,11 +52,6 @@ class SearchActivity : AppCompatActivity() {
             render(SearchState.SearchContent(searchList))
         }
 
-        //Кнопка Назад
-        binding.searchButtonBack.setOnClickListener {
-            finishAfterTransition()
-        }
-
         binding.clearButton.setOnClickListener {
             binding.inputEditText.setText("")
             viewModel.clearSearchButton()
@@ -58,7 +60,7 @@ class SearchActivity : AppCompatActivity() {
         //Видимость Крестика в Поиске
         fun clearButtonVisibility(s: CharSequence?): Int {
             return if (s.isNullOrEmpty()) {
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(binding.clearButton.windowToken, 0)
                 View.GONE
 
@@ -113,16 +115,19 @@ class SearchActivity : AppCompatActivity() {
             viewModel.goForApiSearch(binding.inputEditText.text.toString())
         }
 
-    }
+        searchText = savedInstanceState?.getString(SEARCH_TEXT, TEXT) ?: ""
+        repeat(10){Log.d("RESTORED", "RESTOREEED")}
+        binding.inputEditText.setText(searchText)
 
+    }
 
     private fun render(state: SearchState){
         when (state){
-             is SearchState.SearchContent -> showSearchList(state.searchList)
-             is SearchState.NoInternet -> showNoInternetPlaceholder()
-             is SearchState.NothingFound -> showNothingFoundPlaceholder()
-             is SearchState.Loading -> showLoading()
-             is SearchState.HistoryContent -> showHistoryList(state.historyList.toMutableList())
+            is SearchState.SearchContent -> showSearchList(state.searchList)
+            is SearchState.NoInternet -> showNoInternetPlaceholder()
+            is SearchState.NothingFound -> showNothingFoundPlaceholder()
+            is SearchState.Loading -> showLoading()
+            is SearchState.HistoryContent -> showHistoryList(state.historyList.toMutableList())
         }
     }
 
@@ -194,14 +199,18 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         searchText = binding.inputEditText.text.toString()
+        repeat(10){Log.d("SAVED", "SAAAAAAAAAVED")}
         outState.putString(SEARCH_TEXT, searchText)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchText = savedInstanceState.getString(SEARCH_TEXT, TEXT)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        searchText = savedInstanceState?.getString(SEARCH_TEXT, TEXT) ?: ""
+        repeat(10){Log.d("RESTORED", "RESTOREEED")}
         binding.inputEditText.setText(searchText)
     }
+
+
 
 
     companion object {
