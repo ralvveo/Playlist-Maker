@@ -83,4 +83,12 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:letterSpacing">0</item>
     </style>
+
+    <style name="BottomMenuTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
 </resources>

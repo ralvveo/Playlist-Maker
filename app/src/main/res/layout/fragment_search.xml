@@ -150,14 +150,9 @@
                 android:backgroundTint="@color/search_error_icon_color"
                 android:letterSpacing="0"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="50dp"
 
                 />
-
-
-
-
-
-
 
         </LinearLayout>
 

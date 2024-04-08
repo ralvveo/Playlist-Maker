@@ -39,16 +39,15 @@ class SearchFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val trackAdapter = TracksAdapter(viewModel::addTrackToHistory)
         binding.recyclerView.adapter = trackAdapter
-
-        viewModel.getSearchHistoryLiveData().observe(this){ trackHistoryList ->
+        viewModel.getSearchHistoryLiveData().observe(viewLifecycleOwner){ trackHistoryList ->
             updateHistoryList(trackHistoryList)
         }
 
-        viewModel.getState().observe(this){state ->
+        viewModel.getState().observe(viewLifecycleOwner){state ->
             render(state)
         }
 
-        viewModel.getSearchLiveData().observe(this){searchList ->
+        viewModel.getSearchLiveData().observe(viewLifecycleOwner){searchList ->
             render(SearchState.SearchContent(searchList))
         }
 
@@ -73,10 +72,12 @@ class SearchFragment : Fragment() {
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && binding.inputEditText.text.isEmpty() && !viewModel.getSearchHistoryLiveData().value.isNullOrEmpty()) {
                 viewModel.stateHistoryContent()
+
             }
             else {
                 viewModel.stateSearchContent()
             }
+
         }
 
         binding.searchHistoryButton.setOnClickListener{
@@ -89,6 +90,7 @@ class SearchFragment : Fragment() {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.searchDebounce(binding.inputEditText.text.toString())
+                savedInstanceState?.putString(SEARCH_TEXT, searchText)
                 binding.clearButton.visibility = clearButtonVisibility(s)
                 if (binding.inputEditText.hasFocus() && s?.isEmpty() == true && !viewModel.getSearchHistoryLiveData().value.isNullOrEmpty())
                     viewModel.stateHistoryContent()
@@ -116,7 +118,6 @@ class SearchFragment : Fragment() {
         }
 
         searchText = savedInstanceState?.getString(SEARCH_TEXT, TEXT) ?: ""
-        repeat(10){Log.d("RESTORED", "RESTOREEED")}
         binding.inputEditText.setText(searchText)
 
     }
@@ -196,25 +197,10 @@ class SearchFragment : Fragment() {
 
     //Сохранение введенного в Поиске Текста
     private var searchText = TEXT
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        searchText = binding.inputEditText.text.toString()
-        repeat(10){Log.d("SAVED", "SAAAAAAAAAVED")}
-        outState.putString(SEARCH_TEXT, searchText)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        searchText = savedInstanceState?.getString(SEARCH_TEXT, TEXT) ?: ""
-        repeat(10){Log.d("RESTORED", "RESTOREEED")}
-        binding.inputEditText.setText(searchText)
-    }
-
-
-
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val HAS_FOCUS = "HAS_FOCUS"
         const val TEXT = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }

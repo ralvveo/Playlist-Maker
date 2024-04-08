@@ -6,6 +6,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.findFragment
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.model.Track
@@ -39,13 +41,9 @@ class TracksAdapter(
             val context = holder.itemView.context
             holder.itemView.setOnClickListener {
                 if (clickDebounce()) {
-                    parentFragment.parentFragmentManager.beginTransaction()
-                        .replace(R.id.rootFragmentContainerView, AudioplayerFragment.newInstance(Json.encodeToString(tracks[position])))
-                        .addToBackStack("AudioplayerFragment")
-                        .commit()
-//                    val displayIntent = Intent(context, AudioplayerActivity::class.java)
-//                    displayIntent.putExtra("trackJson", Json.encodeToString(tracks[position]))
-//                    context.startActivity(displayIntent)
+                    findNavController(fragment = parentFragment).navigate(
+                        R.id.action_searchFragment_to_audioplayerFragment,
+                        AudioplayerFragment.createArgs(Json.encodeToString(tracks[position])))
                     onItemClick(tracks[position])
                 }
             }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
@@ -42,13 +43,13 @@ class AudioplayerFragment : Fragment(), KoinComponent {
         val trackJson = requireArguments().getString(TRACK_JSON)
         previewUrl  = Json.decodeFromString<Track>(trackJson!!).previewUrl
         initializeActivityWithTrackInfo()
-        viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
+        viewModel.getPlayStatusLiveData().observe(viewLifecycleOwner) { playStatus ->
             changeButtonStyle(playStatus)
             changeTimer(playStatus)
         }
         //Кнопка Назад
         binding.audioplayerArrowBack.setOnClickListener {
-
+            findNavController().navigateUp()
         }
         //Кнопка Воспроизведения
         binding.audioplayerCenterButton.setOnClickListener{
@@ -102,19 +103,13 @@ class AudioplayerFragment : Fragment(), KoinComponent {
         }
     }
 
-
     companion object {
 
         private const val TRACK_JSON = "track_json"
 
-        fun newInstance(trackJson: String): Fragment {
-            return AudioplayerFragment().apply {
-                // Пробрасываем аргументы в Bundle
-                arguments = bundleOf(
-                    TRACK_JSON to trackJson,
-                )
-            }
-        }
+        // Пробрасываем аргументы в Bundle
+        fun createArgs(trackJson: String): Bundle =
+            bundleOf(TRACK_JSON to trackJson)
 
     }
 }

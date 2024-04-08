@@ -45,15 +45,4 @@ class SettingsFragment : Fragment() {
 
     }
 
-
-
-    //Фикс бага с мигающим экраном при смене темы
-//    override fun recreate() {
-//        finish()
-//        startActivity(intent)
-//        overridePendingTransition(
-//            R.anim.empty_animation,
-//            R.anim.empty_animation
-//        )
-//    }
 }
