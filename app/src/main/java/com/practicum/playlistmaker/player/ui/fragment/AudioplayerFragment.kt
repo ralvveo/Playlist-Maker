@@ -1,14 +1,18 @@
-package com.practicum.playlistmaker.player.ui.activity
+package com.practicum.playlistmaker.player.ui.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityAudioplayerBinding
+import com.practicum.playlistmaker.databinding.FragmentAudioplayerBinding
+import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.view_model.AudioplayerViewModel
@@ -19,33 +23,39 @@ import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioplayerActivity : AppCompatActivity(), KoinComponent{
 
-    private lateinit var binding: ActivityAudioplayerBinding
+class AudioplayerFragment : Fragment(), KoinComponent {
+
+    private lateinit var binding: FragmentAudioplayerBinding
     private lateinit var previewUrl: String
     private val viewModel: AudioplayerViewModel by inject{
         parametersOf(previewUrl)
     }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityAudioplayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val trackJson = intent.getStringExtra("trackJson")
+        binding = FragmentAudioplayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val trackJson = requireArguments().getString(TRACK_JSON)
         previewUrl  = Json.decodeFromString<Track>(trackJson!!).previewUrl
         initializeActivityWithTrackInfo()
-        viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
+        viewModel.getPlayStatusLiveData().observe(viewLifecycleOwner) { playStatus ->
             changeButtonStyle(playStatus)
             changeTimer(playStatus)
         }
         //Кнопка Назад
         binding.audioplayerArrowBack.setOnClickListener {
-            finish()
+            findNavController().navigateUp()
         }
         //Кнопка Воспроизведения
         binding.audioplayerCenterButton.setOnClickListener{
             viewModel.playButtonClick()
         }
+
     }
 
     private fun changeButtonStyle(playStatus: PlayStatus){
@@ -69,7 +79,7 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent{
     }
 
     private fun initializeActivityWithTrackInfo(){
-        val trackJson = intent.getStringExtra("trackJson")
+        val trackJson = requireArguments().getString(TRACK_JSON)
         val currentTrack: Track = Json.decodeFromString<Track>(trackJson!!)
         binding.trackName.text = currentTrack.trackName
         binding.trackAuthor.text = currentTrack.artistName
@@ -91,5 +101,15 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent{
             binding.trackAlbumText.visibility = View.GONE
             binding.trackAlbum.visibility = View.GONE
         }
+    }
+
+    companion object {
+
+        private const val TRACK_JSON = "track_json"
+
+        // Пробрасываем аргументы в Bundle
+        fun createArgs(trackJson: String): Bundle =
+            bundleOf(TRACK_JSON to trackJson)
+
     }
 }

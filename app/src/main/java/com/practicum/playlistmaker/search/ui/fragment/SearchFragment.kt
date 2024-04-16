@@ -1,53 +1,54 @@
-package com.practicum.playlistmaker.search.ui.activity
+package com.practicum.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.search.domain.state.SearchState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<SearchViewModel>()
     private lateinit var trackHistoryAdapter: TracksAdapter
     private lateinit var trackAdapter: TracksAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
-        binding.searchHistoryList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
-        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.searchHistoryList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val trackAdapter = TracksAdapter(viewModel::addTrackToHistory)
         binding.recyclerView.adapter = trackAdapter
-
-        viewModel.getSearchHistoryLiveData().observe(this){ trackHistoryList ->
+        viewModel.getSearchHistoryLiveData().observe(viewLifecycleOwner){ trackHistoryList ->
             updateHistoryList(trackHistoryList)
         }
 
-        viewModel.getState().observe(this){state ->
+        viewModel.getState().observe(viewLifecycleOwner){state ->
             render(state)
         }
 
-        viewModel.getSearchLiveData().observe(this){searchList ->
+        viewModel.getSearchLiveData().observe(viewLifecycleOwner){searchList ->
             render(SearchState.SearchContent(searchList))
-        }
-
-        //Кнопка Назад
-        binding.searchButtonBack.setOnClickListener {
-            finishAfterTransition()
         }
 
         binding.clearButton.setOnClickListener {
@@ -58,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
         //Видимость Крестика в Поиске
         fun clearButtonVisibility(s: CharSequence?): Int {
             return if (s.isNullOrEmpty()) {
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(binding.clearButton.windowToken, 0)
                 View.GONE
 
@@ -71,10 +72,12 @@ class SearchActivity : AppCompatActivity() {
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && binding.inputEditText.text.isEmpty() && !viewModel.getSearchHistoryLiveData().value.isNullOrEmpty()) {
                 viewModel.stateHistoryContent()
+
             }
             else {
                 viewModel.stateSearchContent()
             }
+
         }
 
         binding.searchHistoryButton.setOnClickListener{
@@ -87,6 +90,7 @@ class SearchActivity : AppCompatActivity() {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.searchDebounce(binding.inputEditText.text.toString())
+                savedInstanceState?.putString(SEARCH_TEXT, searchText)
                 binding.clearButton.visibility = clearButtonVisibility(s)
                 if (binding.inputEditText.hasFocus() && s?.isEmpty() == true && !viewModel.getSearchHistoryLiveData().value.isNullOrEmpty())
                     viewModel.stateHistoryContent()
@@ -113,16 +117,18 @@ class SearchActivity : AppCompatActivity() {
             viewModel.goForApiSearch(binding.inputEditText.text.toString())
         }
 
-    }
+        searchText = savedInstanceState?.getString(SEARCH_TEXT, TEXT) ?: ""
+        binding.inputEditText.setText(searchText)
 
+    }
 
     private fun render(state: SearchState){
         when (state){
-             is SearchState.SearchContent -> showSearchList(state.searchList)
-             is SearchState.NoInternet -> showNoInternetPlaceholder()
-             is SearchState.NothingFound -> showNothingFoundPlaceholder()
-             is SearchState.Loading -> showLoading()
-             is SearchState.HistoryContent -> showHistoryList(state.historyList.toMutableList())
+            is SearchState.SearchContent -> showSearchList(state.searchList)
+            is SearchState.NoInternet -> showNoInternetPlaceholder()
+            is SearchState.NothingFound -> showNothingFoundPlaceholder()
+            is SearchState.Loading -> showLoading()
+            is SearchState.HistoryContent -> showHistoryList(state.historyList.toMutableList())
         }
     }
 
@@ -191,21 +197,10 @@ class SearchActivity : AppCompatActivity() {
 
     //Сохранение введенного в Поиске Текста
     private var searchText = TEXT
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        searchText = binding.inputEditText.text.toString()
-        outState.putString(SEARCH_TEXT, searchText)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchText = savedInstanceState.getString(SEARCH_TEXT, TEXT)
-        binding.inputEditText.setText(searchText)
-    }
-
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val HAS_FOCUS = "HAS_FOCUS"
         const val TEXT = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }

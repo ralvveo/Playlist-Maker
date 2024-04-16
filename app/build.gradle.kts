@@ -56,7 +56,12 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation ("io.insert-koin:koin-android:$koinVersion")
     implementation ("io.insert-koin:koin-core:$koinVersion")
-
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation ("androidx.fragment:fragment-ktx:1.5.6")
+    implementation ("com.google.android.material:material:1.8.0")
 
 
 }
