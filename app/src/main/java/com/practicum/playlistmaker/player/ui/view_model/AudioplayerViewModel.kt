@@ -1,11 +1,14 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.MediaplayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -23,6 +26,7 @@ class AudioplayerViewModel(trackId: String): ViewModel(), MyCallback, KoinCompon
 
     init{
         mediaplayerInteractor.preparePlayer(trackId)
+
     }
 
     fun playButtonClick(){

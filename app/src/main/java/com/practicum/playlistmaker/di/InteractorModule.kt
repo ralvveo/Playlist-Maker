@@ -9,7 +9,6 @@ import com.practicum.playlistmaker.search.domain.RetrofitSearcherInteractor
 import com.practicum.playlistmaker.search.domain.SearchHistoryFunctionsInteractor
 import com.practicum.playlistmaker.search.domain.interactor.RetrofitSearcherInteractorImpl
 import com.practicum.playlistmaker.search.domain.interactor.SearchHistoryFunctionsInteractorImpl
-import com.practicum.playlistmaker.search.domain.model.RetrofitCallback
 import com.practicum.playlistmaker.settings.domain.ThemeSwitcherInteractor
 import com.practicum.playlistmaker.settings.domain.interactor.ThemeSwitcherInteractorImpl
 import com.practicum.playlistmaker.sharing.domain.ShareLinksOpenerInteractor
@@ -34,7 +33,7 @@ val interactorModule = module{
         ThemeSwitcherInteractorImpl(themeSwitcher = get())
     }
 
-    factory <RetrofitSearcherInteractor> {(callback: MyCallback, retrofitCallback: RetrofitCallback) ->
-        RetrofitSearcherInteractorImpl(retrofitSearcher = RetrofitSearcherRepositoryImpl(get(), callback, retrofitCallback))
+    factory <RetrofitSearcherInteractor> {
+        RetrofitSearcherInteractorImpl(retrofitSearcher = RetrofitSearcherRepositoryImpl(get()))
     }
 }
