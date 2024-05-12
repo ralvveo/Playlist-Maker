@@ -21,7 +21,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.coroutineTest()
         binding.themeSwitcher.isChecked = viewModel.getTheme()
         //Кнопка Поделиться приложением
         binding.settingsButtonShare.setOnClickListener {

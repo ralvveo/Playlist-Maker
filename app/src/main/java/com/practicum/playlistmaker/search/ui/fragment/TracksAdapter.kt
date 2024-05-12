@@ -13,6 +13,10 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.fragment.AudioplayerFragment
 import com.practicum.playlistmaker.search.ui.fragment.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 
@@ -26,7 +30,7 @@ class TracksAdapter(
         tracks = trackList
     }
     private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
+    private val scope = CoroutineScope(Dispatchers.Main.immediate)
     private lateinit var parentFragment: SearchFragment
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -57,7 +61,10 @@ class TracksAdapter(
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            scope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }

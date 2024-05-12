@@ -5,7 +5,6 @@ import com.practicum.playlistmaker.player.domain.repository.MediaplayerRepositor
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
 import com.practicum.playlistmaker.search.data.repository.RetrofitSearcherRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.SearchHistoryFunctionsRepositoryImpl
-import com.practicum.playlistmaker.search.domain.model.RetrofitCallback
 import com.practicum.playlistmaker.search.domain.repository.RetrofitSearcherRepository
 import com.practicum.playlistmaker.search.domain.repository.SearchHistoryFunctionsRepository
 import com.practicum.playlistmaker.settings.data.ThemeSwitcherRepositoryImpl
@@ -32,7 +31,7 @@ val repositoryModule = module{
         ThemeSwitcherRepositoryImpl(context = get())
     }
 
-    factory <RetrofitSearcherRepository> {(callback: MyCallback, retrofitCallback: RetrofitCallback ) ->
-        RetrofitSearcherRepositoryImpl(itunesSearchService = get(), callback = callback, retrofitCallback = retrofitCallback)
+    factory <RetrofitSearcherRepository> {
+        RetrofitSearcherRepositoryImpl(itunesSearchService = get())
     }
 }
