@@ -1,14 +1,18 @@
 package com.practicum.playlistmaker.search.data.repository
 
+import com.practicum.playlistmaker.media.data.db.AppDatabase
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.search.data.dto.TracksResponse
 import com.practicum.playlistmaker.search.data.network.ItunesSearchApi
 import com.practicum.playlistmaker.search.domain.repository.RetrofitSearcherRepository
 import com.practicum.playlistmaker.search.domain.state.SearchState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
-class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi) : RetrofitSearcherRepository {
+class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi, val appDatabase: AppDatabase) : RetrofitSearcherRepository {
 
     //Работа c Itunes Search Api
     override fun goForApiSearch(): Flow<SearchState> = flow {
@@ -19,6 +23,7 @@ class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi) :
                 if (!response.results.isNullOrEmpty()) {
                     emit(SearchState.SearchContent((response).results.map {
                         Track(
+                            it.trackId,
                             it.trackName,
                             it.artistName,
                             it.trackTime,
@@ -27,7 +32,8 @@ class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi) :
                             it.releaseDate,
                             it.primaryGenreName,
                             it.country,
-                            it.previewUrl
+                            it.previewUrl,
+                            checkIsFavourite(it.trackId)
                         )
                     }))
                 } else {
@@ -43,6 +49,11 @@ class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi) :
     }
     private var searchText = ""
 
+    private suspend fun checkIsFavourite(trackId: String): Boolean{
+        val currentFavouriteTrackList = appDatabase.trackDao().getTrackIds()
+        return (trackId in currentFavouriteTrackList)
+
+    }
     override fun setSearchText(newSearchText: String){
         searchText = newSearchText
     }

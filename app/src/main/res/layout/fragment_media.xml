@@ -30,6 +30,8 @@
             />
     </LinearLayout>
 
+
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -39,6 +41,7 @@
         app:tabIndicatorColor="@color/black_white"
         app:tabTextAppearance="@style/TabsTextStyle"
         />
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

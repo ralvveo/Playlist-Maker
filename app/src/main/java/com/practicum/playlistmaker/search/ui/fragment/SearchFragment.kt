@@ -34,11 +34,14 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
+
         binding.searchHistoryList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        val trackAdapter = TracksAdapter(viewModel::addTrackToHistory)
+
+        trackAdapter = TracksAdapter(viewModel::addTrackToHistory)
+        trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
         binding.recyclerView.adapter = trackAdapter
+        binding.searchHistoryList.adapter = trackHistoryAdapter
         viewModel.getSearchHistoryLiveData().observe(viewLifecycleOwner){ trackHistoryList ->
             updateHistoryList(trackHistoryList)
         }
@@ -135,9 +138,7 @@ class SearchFragment : Fragment() {
 
     private fun updateHistoryList(trackHistoryList: MutableList<Track>?){
         if (!trackHistoryList.isNullOrEmpty()) {
-            trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
             trackHistoryAdapter.setTrackList(trackHistoryList ?: mutableListOf())
-            binding.searchHistoryList.adapter = trackHistoryAdapter
             trackHistoryAdapter.notifyDataSetChanged()
             binding.progressBar.visibility = View.GONE
         }
@@ -147,9 +148,7 @@ class SearchFragment : Fragment() {
 
     private fun showHistoryList(trackHistoryList: MutableList<Track>?){
         if (!trackHistoryList.isNullOrEmpty()) {
-            trackHistoryAdapter = TracksAdapter(viewModel::addTrackToHistory)
             trackHistoryAdapter.setTrackList(trackHistoryList ?: mutableListOf())
-            binding.searchHistoryList.adapter = trackHistoryAdapter
             binding.searchHistory.visibility = View.VISIBLE
             binding.searchError.visibility = View.GONE
             trackHistoryAdapter.notifyDataSetChanged()
@@ -160,9 +159,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showSearchList(trackList: List<Track>){
-        trackAdapter = TracksAdapter(viewModel::addTrackToHistory)
         trackAdapter.setTrackList(trackList.toMutableList())
-        binding.recyclerView.adapter = trackAdapter
         trackAdapter.notifyDataSetChanged()
         binding.recyclerView.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
