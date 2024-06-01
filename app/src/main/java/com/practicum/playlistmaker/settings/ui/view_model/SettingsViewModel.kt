@@ -39,35 +39,4 @@ class SettingsViewModel : ViewModel(), KoinComponent{
         themeSwitcherInteractor.switchTheme()
     }
 
-    fun coroutineTest(){
-        viewModelScope.launch{
-            ourNumbersFlow().collect {
-                value -> Log.d("value", "$value")
-            }
-        }
-    }
-
-
-    private suspend fun ourNumbersFlow(): Flow<Int> = flow{
-        (0..10).forEach {
-            delay(1000)
-            emit(it)
-        }
-
-        }.filter{ it % 2 == 0}
-        . map{value -> value * value}
-
-
-    private suspend fun calculateFactorial(value: Int): Int {
-        var result = 1
-        // 3
-        for (i in 1..value) {
-            result *= i
-            // 4
-            Log.d("coroutine_test", "Факториал числа $i = $result")
-            delay(timeMillis = 1000)
-        }
-        return result
-    }
-
 }

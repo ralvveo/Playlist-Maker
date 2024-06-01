@@ -1,17 +1,16 @@
 package com.practicum.playlistmaker.search.ui.fragment
 
 
-import android.os.Handler
-import android.os.Looper
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.findFragment
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker.player.ui.fragment.AudioplayerFragment
+import com.practicum.playlistmaker.player.ui.fragment.AudioplayerActivity
 import com.practicum.playlistmaker.search.ui.fragment.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,11 +42,12 @@ class TracksAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
             holder.bind(tracks[position])
             val context = holder.itemView.context
+            repeat(10){Log.d("Context", "$context")}
             holder.itemView.setOnClickListener {
                 if (clickDebounce()) {
-                    findNavController(fragment = parentFragment).navigate(
-                        R.id.action_searchFragment_to_audioplayerFragment,
-                        AudioplayerFragment.createArgs(Json.encodeToString(tracks[position])))
+                    val displayIntent = Intent(context, AudioplayerActivity::class.java)
+                    displayIntent.putExtra("trackJson", Json.encodeToString(tracks[position]))
+                    context.startActivity(displayIntent)
                     onItemClick(tracks[position])
                 }
             }

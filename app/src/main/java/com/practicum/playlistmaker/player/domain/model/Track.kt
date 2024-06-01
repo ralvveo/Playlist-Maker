@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Track (
+    val trackId: String,
     val trackName: String,
     val artistName: String,
     @SerializedName("trackTimeMillis") val trackTime: Long,
@@ -13,6 +14,7 @@ data class Track (
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String,
+    var isFavourite: Boolean
 
 )

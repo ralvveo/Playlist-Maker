@@ -2,11 +2,12 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.22"
+    id("kotlin-kapt")
 }
 
 android {
     namespace = "com.practicum.playlistmaker"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.practicum.playlistmaker"
@@ -67,5 +68,10 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
 
+    // Room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
 }

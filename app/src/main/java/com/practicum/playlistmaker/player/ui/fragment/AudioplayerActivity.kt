@@ -1,18 +1,14 @@
 package com.practicum.playlistmaker.player.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.FragmentAudioplayerBinding
-import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
+import com.practicum.playlistmaker.databinding.ActivityAudioplayerBinding
 import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.view_model.AudioplayerViewModel
@@ -24,36 +20,51 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class AudioplayerFragment : Fragment(), KoinComponent {
+class AudioplayerActivity : AppCompatActivity(), KoinComponent {
 
-    private lateinit var binding: FragmentAudioplayerBinding
+    private lateinit var binding: ActivityAudioplayerBinding
     private lateinit var previewUrl: String
+    private lateinit var currentTrack: Track
     private val viewModel: AudioplayerViewModel by inject{
-        parametersOf(previewUrl)
-    }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        binding = FragmentAudioplayerBinding.inflate(inflater, container, false)
-        return binding.root
+        parametersOf(currentTrack)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityAudioplayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val trackJson = requireArguments().getString(TRACK_JSON)
+        val trackJson = intent.getStringExtra(TRACK_JSON)
+        currentTrack= Json.decodeFromString<Track>(trackJson!!)
         previewUrl  = Json.decodeFromString<Track>(trackJson!!).previewUrl
         initializeActivityWithTrackInfo()
-        viewModel.getPlayStatusLiveData().observe(viewLifecycleOwner) { playStatus ->
+        viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
             changeButtonStyle(playStatus)
             changeTimer(playStatus)
         }
+        viewModel.getTrackIsFavouriteLiveData().observe(this){ isFavourite->
+            changeLikeColor(isFavourite)
+        }
         //Кнопка Назад
         binding.audioplayerArrowBack.setOnClickListener {
-            findNavController().navigateUp()
+            finish()
         }
         //Кнопка Воспроизведения
         binding.audioplayerCenterButton.setOnClickListener{
             viewModel.playButtonClick()
+        }
+
+        binding.audioplayerRightButton.setOnClickListener {
+            if (currentTrack.isFavourite){
+                binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button)
+                viewModel.deleteTrack()
+                currentTrack.isFavourite = false
+            }
+            else {
+                binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button_active)
+                viewModel.insertTrack()
+                currentTrack.isFavourite = true
+            }
         }
 
     }
@@ -63,6 +74,13 @@ class AudioplayerFragment : Fragment(), KoinComponent {
             true -> binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_pause)
             false -> binding.audioplayerCenterButton.background = ContextCompat.getDrawable(binding.audioplayerCenterButton.context, R.drawable.audioplayer_center_button_play)
         }
+    }
+
+    private fun changeLikeColor(isFavourite: Boolean){
+        if (isFavourite)
+            binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button_active)
+        else
+            binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button)
     }
 
     private fun changeTimer(playStatus: PlayStatus){
@@ -79,8 +97,9 @@ class AudioplayerFragment : Fragment(), KoinComponent {
     }
 
     private fun initializeActivityWithTrackInfo(){
-        val trackJson = requireArguments().getString(TRACK_JSON)
+        val trackJson = intent.getStringExtra(TRACK_JSON)
         val currentTrack: Track = Json.decodeFromString<Track>(trackJson!!)
+        val trackIsFavourite = viewModel.checkFavourite()
         binding.trackName.text = currentTrack.trackName
         binding.trackAuthor.text = currentTrack.artistName
         binding.trackDurationText.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentTrack.trackTime)
@@ -90,6 +109,10 @@ class AudioplayerFragment : Fragment(), KoinComponent {
         binding.trackCountryText.text = currentTrack.country
         binding.trackAlbum.visibility = View.VISIBLE
         binding.trackAlbumText.visibility = View.VISIBLE
+        if (currentTrack.isFavourite)
+            binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button_active)
+        else
+            binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button)
         val infoTrackImage512 = currentTrack.artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg")
         val roundedCornersSize = 8
         Glide.with(binding.trackImage)
@@ -105,7 +128,7 @@ class AudioplayerFragment : Fragment(), KoinComponent {
 
     companion object {
 
-        private const val TRACK_JSON = "track_json"
+        private const val TRACK_JSON = "trackJson"
 
         // Пробрасываем аргументы в Bundle
         fun createArgs(trackJson: String): Bundle =

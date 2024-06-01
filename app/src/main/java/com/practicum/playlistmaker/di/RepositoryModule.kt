@@ -1,5 +1,8 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.media.data.repository.MediaRepositoryImpl
+import com.practicum.playlistmaker.media.domain.repository.MediaRepository
 import com.practicum.playlistmaker.player.data.MediaplayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaplayerRepository
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
@@ -32,6 +35,14 @@ val repositoryModule = module{
     }
 
     factory <RetrofitSearcherRepository> {
-        RetrofitSearcherRepositoryImpl(itunesSearchService = get())
+        RetrofitSearcherRepositoryImpl(itunesSearchService = get(), appDatabase = get())
+    }
+
+    factory<TrackDbConverter>{
+        TrackDbConverter()
+    }
+
+    factory<MediaRepository>{
+        MediaRepositoryImpl(get(), get())
     }
 }

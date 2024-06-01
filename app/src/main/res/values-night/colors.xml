@@ -12,4 +12,5 @@
     <color name="black_white">#FFFFFFFF</color>
     <color name="white_black">#1A1B22</color>
 
+    <color name="audioplayer_icon_colors">#AEAFB4</color>
 </resources>

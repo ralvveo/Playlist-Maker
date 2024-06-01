@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker.di
 
+import androidx.room.Room
+import com.practicum.playlistmaker.media.data.db.AppDatabase
 import com.practicum.playlistmaker.search.data.network.ItunesSearchApi
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,5 +16,10 @@ val dataModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ItunesSearchApi::class.java)
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 }
