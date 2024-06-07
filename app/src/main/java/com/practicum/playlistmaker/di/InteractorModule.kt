@@ -1,11 +1,13 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.media.domain.db.MediaInteractor
-import com.practicum.playlistmaker.media.domain.interactor.MediaInteractorImpl
+import com.practicum.playlistmaker.favourites.domain.interactor.MediaInteractor
+import com.practicum.playlistmaker.favourites.domain.impl.MediaInteractorImpl
 import com.practicum.playlistmaker.player.data.MediaplayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.MediaplayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.MediaplayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
+import com.practicum.playlistmaker.playlists.domain.impl.PlaylistInteractorImpl
+import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistInteractor
 import com.practicum.playlistmaker.search.domain.RetrofitSearcherInteractor
 import com.practicum.playlistmaker.search.domain.SearchHistoryFunctionsInteractor
 import com.practicum.playlistmaker.search.domain.interactor.RetrofitSearcherInteractorImpl
@@ -40,5 +42,9 @@ val interactorModule = module{
 
     factory <RetrofitSearcherInteractor> {
         RetrofitSearcherInteractorImpl(retrofitSearcher = get())
+    }
+
+    factory <PlaylistInteractor> {
+        PlaylistInteractorImpl(playlistRepository = get())
     }
 }

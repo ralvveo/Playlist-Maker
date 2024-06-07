@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.favourites.ui.fragment.FavouritesFragment
 import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker.player.ui.fragment.AudioplayerActivity
+import com.practicum.playlistmaker.player.ui.activity.AudioplayerActivity
 import com.practicum.playlistmaker.search.ui.fragment.SearchFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

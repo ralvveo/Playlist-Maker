@@ -18,7 +18,8 @@
         <activity
             android:name=".root.ui.activity.RootActivity"
             android:windowSoftInputMode="adjustNothing"
-            android:exported="true">
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +28,7 @@
         </activity>
 
         <activity
-            android:name=".player.ui.fragment.AudioplayerActivity"
+            android:name=".player.ui.activity.AudioplayerActivity"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true"/>
 

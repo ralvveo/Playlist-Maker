@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.practicum.playlistmaker.playlists.ui.fragment.NewPlaylistFragment"
+    android:background="@color/white_black">
+
+    <ImageButton
+        android:id="@+id/new_playlist_arrow_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_20dp"
+        android:layout_marginTop="@dimen/_20dp"
+        android:background="@drawable/arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <TextView
+        android:id="@+id/new_playlist_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/new_playlist"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/settings_text"
+        android:textSize="@dimen/_22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/new_playlist_arrow_back"
+        app:layout_constraintStart_toEndOf="@+id/new_playlist_arrow_back"
+        app:layout_constraintTop_toTopOf="@+id/new_playlist_arrow_back"
+
+        />
+
+    <ImageButton
+        android:id="@+id/picture_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_24dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="@dimen/_24dp"
+        android:background="@drawable/gaps_shape"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_playlist_title"
+
+        />
+
+    <ImageView
+        android:id="@+id/add_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_add_image"
+        app:layout_constraintBottom_toBottomOf="@+id/picture_button"
+        app:layout_constraintEnd_toEndOf="@+id/picture_button"
+        app:layout_constraintStart_toStartOf="@+id/picture_button"
+        app:layout_constraintTop_toTopOf="@+id/picture_button"
+
+        />
+
+    <EditText
+        android:id="@+id/enter_name"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:background="@drawable/rounded_corner_shape"
+        android:fontFamily="@font/ys_display_regular"
+        android:hint="@string/name"
+        android:inputType="textNoSuggestions"
+        android:lines="1"
+        android:maxLength="50"
+        android:paddingStart="@dimen/_16dp"
+        android:textColorHint="@color/black_white"
+        android:textSize="@dimen/_16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/picture_button" />
+
+    <TextView
+        android:id="@+id/enter_name_active_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12dp"
+        android:alpha="1"
+        android:background="@color/white_black"
+        android:fontFamily="@font/ys_display_regular"
+        android:text="@string/name"
+        android:textColor="@color/blue"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/enter_name"
+        app:layout_constraintStart_toStartOf="@id/enter_name"
+        app:layout_constraintTop_toTopOf="@id/enter_name"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:id="@+id/enter_descr"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:background="@drawable/rounded_corner_shape"
+        android:fontFamily="@font/ys_display_regular"
+        android:hint="@string/descr"
+        android:inputType="textNoSuggestions"
+        android:lines="1"
+        android:maxLength="50"
+        android:paddingStart="@dimen/_16dp"
+        android:textColorHint="@color/black_white"
+        android:textSize="@dimen/_16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_name" />
+
+
+    <TextView
+        android:id="@+id/enter_descr_active_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12dp"
+        android:alpha="1"
+        android:background="@color/white_black"
+        android:fontFamily="@font/ys_display_regular"
+        android:text="@string/descr"
+        android:textColor="@color/blue"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/enter_descr"
+        app:layout_constraintStart_toStartOf="@id/enter_descr"
+        app:layout_constraintTop_toTopOf="@id/enter_descr"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/create_playlist_button"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/create_button_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_regular"
+        android:text="@string/create"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16sp"
+        app:layout_constraintBottom_toBottomOf="@id/create_playlist_button"
+        app:layout_constraintEnd_toEndOf="@id/create_playlist_button"
+        app:layout_constraintStart_toStartOf="@+id/create_playlist_button"
+        app:layout_constraintTop_toTopOf="@id/create_playlist_button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
