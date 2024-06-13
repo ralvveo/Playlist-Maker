@@ -1,14 +1,12 @@
 package com.practicum.playlistmaker.player.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -22,9 +20,6 @@ import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.view_model.AudioplayerViewModel
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.playlists.ui.fragment.NewPlaylistFragment
-import com.practicum.playlistmaker.playlists.ui.fragment.PlaylistsAdapter
-import com.practicum.playlistmaker.root.ui.activity.RootActivity
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -49,19 +44,26 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityAudioplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val trackJson = intent.getStringExtra(TRACK_JSON)
-        currentTrack = Json.decodeFromString<Track>(trackJson!!)
-        previewUrl = Json.decodeFromString<Track>(trackJson!!).previewUrl
+        val trackJson = intent.getStringExtra(TRACK_JSON)?: ""
+        currentTrack = Json.decodeFromString<Track>(trackJson)
+        previewUrl = Json.decodeFromString<Track>(trackJson).previewUrl
         playlistListAdapter = PlaylistListAdapter(viewModel::addTrackToPlaylist)
 
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         binding.recyclerView.adapter = playlistListAdapter
 
-
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
         initializeActivityWithTrackInfo()
 
-
+        val newPlaylistFragment: Fragment? = supportFragmentManager.findFragmentByTag(NEWPLAYLIST_TAG)
+        if (newPlaylistFragment != null) {
+            binding.overlay.visibility = View.GONE
+            binding.audioplayerContent.visibility = View.GONE
+            binding.bottomSheet.visibility = View.GONE
+        }
 
         viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
             changeButtonStyle(playStatus)
@@ -89,14 +91,11 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent {
             viewModel.playButtonClick()
         }
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
-        }
         //Кнопка новый плейлист
         binding.newPlaylistButton2.setOnClickListener {
             binding.overlay.visibility = View.GONE
             supportFragmentManager.beginTransaction()
-                .replace(R.id.rootFragmentContainerView, NewPlaylistFragment())
+                .replace(R.id.rootFragmentContainerView, NewPlaylistFragment(), NEWPLAYLIST_TAG)
                 .commit()
             binding.audioplayerContent.visibility = View.GONE
             binding.bottomSheet.visibility = View.GONE
@@ -170,9 +169,9 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent {
     private fun renderAddedToast(trackAdded: AddedTrackStatus){
         var displayText = ""
         if (trackAdded.trackAdded)
-            displayText = "Добавлено в плейлист ${trackAdded.playlistName}"
+            displayText = "${getString(R.string.added_to_playlist)} ${trackAdded.playlistName}"
         else
-            displayText = "Трек уже добавлен в плейлист ${trackAdded.playlistName}"
+            displayText = "${getString(R.string.already_added_to_playlist)} ${trackAdded.playlistName}"
         val snackbar = Snackbar.make(binding.overlay, displayText, R.layout.toast_layout)
         snackbar.duration = Snackbar.LENGTH_LONG
         snackbar.setTextColor(this.getColor(R.color.white_black))
@@ -254,10 +253,7 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent {
     companion object {
 
         private const val TRACK_JSON = "trackJson"
-
-        // Пробрасываем аргументы в Bundle
-        fun createArgs(trackJson: String): Bundle =
-            bundleOf(TRACK_JSON to trackJson)
+        private const val NEWPLAYLIST_TAG = "NewPlaylistFragment"
 
     }
 }

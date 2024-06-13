@@ -30,6 +30,19 @@ class PlaylistRepositoryImpl(private val context: Context, private val database:
         emit(playlistList.map{ playlistEntity -> converter.map(playlistEntity) })
     }
 
+    override fun getPlaylistTrackList(playlist: Playlist): Flow<List<String>> = flow{
+        val playlistEntityList = database.playlistDao().getPlaylists()
+        val playlistList = playlistEntityList.map{ playlistEntity -> converter.map(playlistEntity) }
+        if (playlist !in playlistList) emit(listOf())
+        else{
+            val currentPlaylistIndex =  playlistList.indexOf(playlist)
+            var trackIds = mutableListOf<String>()
+            if (playlistList[currentPlaylistIndex].playlistTrackIds != "")
+                trackIds = Json.decodeFromString<MutableList<String>>(playlistList[currentPlaylistIndex].playlistTrackIds)
+            emit(trackIds)
+        }
+    }
+
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Boolean {
         val getPlaylistList = database.playlistDao().getPlaylists()
         val playlistList = getPlaylistList.map{playlistsEntity ->  converter.map(playlistsEntity)}
@@ -56,7 +69,7 @@ class PlaylistRepositoryImpl(private val context: Context, private val database:
 
     private fun saveImage(uri: Uri) {
         //создаём экземпляр класса File, который указывает на нужный каталог
-        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
+        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), MY_ALBUM)
         val fileCodeName = uri.toString().takeLast(10)
 
         //создаем каталог, если он не создан
@@ -73,5 +86,9 @@ class PlaylistRepositoryImpl(private val context: Context, private val database:
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+    }
+
+    companion object{
+        const val MY_ALBUM = "myalbum"
     }
 }

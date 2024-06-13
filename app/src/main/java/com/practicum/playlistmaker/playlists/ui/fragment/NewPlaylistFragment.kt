@@ -52,12 +52,11 @@ class NewPlaylistFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                if (!s.isNullOrEmpty()) viewModel.setName(s.toString())
+                else viewModel.setName(null)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (!s.isNullOrEmpty()) viewModel.setName(s.toString())
-                else viewModel.setName(null)
             }
         }
 
@@ -66,12 +65,12 @@ class NewPlaylistFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                if (!s.isNullOrEmpty()) viewModel.setDescr(s.toString())
+                else viewModel.setDescr(null)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (!s.isNullOrEmpty()) viewModel.setDescr(s.toString())
-                else viewModel.setDescr(null)
+
             }
         }
 
@@ -89,9 +88,6 @@ class NewPlaylistFragment : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 //обрабатываем событие выбора пользователем фотографии
                 if (uri != null) {
-                    binding.pictureButton.setImageURI(uri)
-                    binding.pictureButton.background = null
-                    binding.addPicture.visibility = View.GONE
                     viewModel.setImage(uri)
                 } else {
                     Log.d("PhotoPicker", "No media selected")
@@ -192,7 +188,9 @@ class NewPlaylistFragment : Fragment() {
             }
 
             else -> {
-
+                binding.pictureButton.setImageURI(state.newPlaylistImage)
+                binding.pictureButton.background = null
+                binding.addPicture.visibility = View.GONE
             }
         }
 
@@ -207,7 +205,10 @@ class NewPlaylistFragment : Fragment() {
         }
 
         binding.newPlaylistArrowBack.setOnClickListener {
-            navigateBack()
+            if ((binding.addPicture.visibility == View.GONE) or (binding.enterDescr.text.toString() != "") or (binding.enterName.text.toString() != ""))
+                showAlert()
+            else
+                navigateBack()
         }
     }
 

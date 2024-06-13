@@ -12,7 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlaylistsAdapter : RecyclerView.Adapter<PlaylistsViewHolder> () {
+class PlaylistsAdapter(
+    private val onItemClick: ((playlist: Playlist) -> Unit)
+) : RecyclerView.Adapter<PlaylistsViewHolder> () {
 
     private var playlists: MutableList<Playlist> = mutableListOf()
     fun setplaylistList(playlistList: MutableList<Playlist>){
@@ -34,7 +36,7 @@ class PlaylistsAdapter : RecyclerView.Adapter<PlaylistsViewHolder> () {
         val context = holder.itemView.context
         holder.itemView.setOnClickListener {
             if (clickDebounce()) {
-                //Open playlist
+                onItemClick(playlists[position])
             }
         }
     }

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.playlists.data.converters.CorrectEnding
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import java.io.File
 
@@ -24,10 +25,10 @@ class PlaylistListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) 
 
     fun bind(model: Playlist) {
         playlistName.text = model.playlistName
-        playlistTrackCount.text = "${model.playlistTrackCount} ${doCorrectEnding(model.playlistTrackCount.toInt())}"
+        playlistTrackCount.text = "${model.playlistTrackCount} ${CorrectEnding.doEnding(model.playlistTrackCount.toInt())}"
         Log.d("PLAYLISTID", "${model.playlistId}")
         val fileCodeName = model.playlistImage.toString().takeLast(10)
-        val filePath = File(playlistName.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
+        val filePath = File(playlistName.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), MY_ALBUM)
         val file = File(filePath, "$fileCodeName.jpg")
         val roundedCornersSize = 8
         Glide.with(itemView)
@@ -37,15 +38,9 @@ class PlaylistListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) 
             .into(playlistImage)
     }
 
-    private fun doCorrectEnding(tracksCount: Int): String{
-        return if (tracksCount in 11..14) "треков"
-        else{
-            when (tracksCount % 10){
-                1 -> "трек"
-                2,3,4 -> "трека"
-                else -> "треков"
-            }
-        }
+    companion object{
+        const val MY_ALBUM = "myalbum"
     }
+
 
 }

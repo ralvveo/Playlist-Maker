@@ -1,13 +1,14 @@
 package com.practicum.playlistmaker.playlists.domain.model
 
-import android.net.Uri
 
+import kotlinx.serialization.Serializable
 
-data class Playlist (
+@Serializable
+data class PlaylistSerializable (
     val playlistId: Long,
     val playlistName: String,
     val playlistDescr: String,
-    val playlistImage: Uri,
+    val playlistImage: String,
     var playlistTrackIds: String,
     var playlistTrackCount: String
 )

@@ -10,8 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.practicum.playlistmaker.playlist.ui.fragment.PlaylistFragment
+import com.practicum.playlistmaker.playlists.data.converters.PlaylistsDbConverter
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.playlists.ui.view_model.PlaylistsViewModel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -30,7 +34,7 @@ class PlaylistsFragment : Fragment() {
         binding.newPlaylistButton.setOnClickListener{
             findNavController().navigate(R.id.action_mediaFragment_to_newPlaylistFragment)
         }
-        playlistsAdapter = PlaylistsAdapter()
+        playlistsAdapter = PlaylistsAdapter(this::openPlaylist)
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2,LinearLayoutManager.VERTICAL, true)
         binding.recyclerView.adapter = playlistsAdapter
@@ -39,6 +43,12 @@ class PlaylistsFragment : Fragment() {
 
         }
 
+    }
+
+    private fun openPlaylist(playlist: Playlist){
+        val converter = PlaylistsDbConverter()
+        val playlistJson = Json.encodeToString(converter.serializeMap(playlist))
+        findNavController().navigate(R.id.action_mediaFragment_to_playlistFragment, PlaylistFragment.createArgs(playlistJson))
     }
 
     private fun render(state: MutableList<Playlist>){

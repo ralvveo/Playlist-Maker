@@ -47,13 +47,5 @@ class RootActivity : AppCompatActivity() {
 
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
-        val navController = navHostFragment.navController
-        val navigationIntent = intent?.getStringExtra("navigation")?: ""
-//        if (navigationIntent == "navigateToNewPlaylist"){
-//            navController.navigate(R.id.action_mediaFragment_to_newPlaylistFragment)
-//        }
-    }
+
 }
