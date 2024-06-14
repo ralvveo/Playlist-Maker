@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.practicum.playlistmaker.media.ui.fragment.FavouritesFragment">
+    tools:context="com.practicum.playlistmaker.favourites.ui.fragment.FavouritesFragment">
 
     <ImageView
         android:id="@+id/favourites_clear_image"

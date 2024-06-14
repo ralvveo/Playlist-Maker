@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.root.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
+import com.practicum.playlistmaker.player.ui.activity.AudioplayerActivity
 import com.practicum.playlistmaker.root.ui.view_model.RootViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,7 +31,7 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.audioplayerActivity -> {
+                R.id.audioplayerActivity, R.id.newPlaylistFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }
                 else -> {
@@ -37,5 +39,13 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }
+
+
+
+
+
+
     }
+
+
 }

@@ -6,11 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.findFragment
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker.player.ui.fragment.AudioplayerActivity
+import com.practicum.playlistmaker.player.ui.activity.AudioplayerActivity
 import com.practicum.playlistmaker.search.ui.fragment.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

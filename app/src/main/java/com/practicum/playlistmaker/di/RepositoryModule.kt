@@ -1,11 +1,14 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.media.data.converters.TrackDbConverter
-import com.practicum.playlistmaker.media.data.repository.MediaRepositoryImpl
-import com.practicum.playlistmaker.media.domain.repository.MediaRepository
+import com.practicum.playlistmaker.favourites.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.favourites.data.repository.MediaRepositoryImpl
+import com.practicum.playlistmaker.favourites.domain.repository.MediaRepository
 import com.practicum.playlistmaker.player.data.MediaplayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaplayerRepository
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
+import com.practicum.playlistmaker.playlists.data.converters.PlaylistsDbConverter
+import com.practicum.playlistmaker.playlists.data.repository.PlaylistRepositoryImpl
+import com.practicum.playlistmaker.playlists.domain.repository.PlaylistRepository
 import com.practicum.playlistmaker.search.data.repository.RetrofitSearcherRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.SearchHistoryFunctionsRepositoryImpl
 import com.practicum.playlistmaker.search.domain.repository.RetrofitSearcherRepository
@@ -42,7 +45,15 @@ val repositoryModule = module{
         TrackDbConverter()
     }
 
+    factory<PlaylistsDbConverter>{
+        PlaylistsDbConverter()
+    }
+
     factory<MediaRepository>{
         MediaRepositoryImpl(get(), get())
+    }
+
+    factory<PlaylistRepository>{
+        PlaylistRepositoryImpl(get(), get(), get())
     }
 }

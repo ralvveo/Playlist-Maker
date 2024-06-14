@@ -1,18 +1,14 @@
 package com.practicum.playlistmaker.search.data.repository
 
-import com.practicum.playlistmaker.media.data.db.AppDatabase
+import com.practicum.playlistmaker.favourites.data.db.Database
 import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker.search.data.dto.TracksResponse
 import com.practicum.playlistmaker.search.data.network.ItunesSearchApi
 import com.practicum.playlistmaker.search.domain.repository.RetrofitSearcherRepository
 import com.practicum.playlistmaker.search.domain.state.SearchState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 
-class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi, val appDatabase: AppDatabase) : RetrofitSearcherRepository {
+class RetrofitSearcherRepositoryImpl(val itunesSearchService: ItunesSearchApi, val appDatabase: Database) : RetrofitSearcherRepository {
 
     //Работа c Itunes Search Api
     override fun goForApiSearch(): Flow<SearchState> = flow {

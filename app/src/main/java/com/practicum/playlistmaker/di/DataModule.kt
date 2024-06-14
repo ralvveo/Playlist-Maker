@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.di
 
 import androidx.room.Room
-import com.practicum.playlistmaker.media.data.db.AppDatabase
+import com.practicum.playlistmaker.favourites.data.db.Database
 import com.practicum.playlistmaker.search.data.network.ItunesSearchApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -19,7 +19,8 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+        Room.databaseBuilder(androidContext(), Database::class.java, "database.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 }
