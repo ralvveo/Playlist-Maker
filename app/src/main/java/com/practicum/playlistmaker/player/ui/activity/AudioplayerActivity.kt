@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -19,7 +18,7 @@ import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.ui.view_model.AudioplayerViewModel
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
-import com.practicum.playlistmaker.playlists.ui.fragment.NewPlaylistFragment
+import com.practicum.playlistmaker.playlist.ui.fragment.NewPlaylistFragment
 import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -105,15 +104,13 @@ class AudioplayerActivity : AppCompatActivity(), KoinComponent {
 
         binding.audioplayerRightButton.setOnClickListener {
             if (currentTrack.isFavourite) {
-                binding.audioplayerRightButton.background =
-                    getDrawable(R.drawable.audioplayer_right_button)
-                viewModel.deleteTrack()
+                binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button)
                 currentTrack.isFavourite = false
+                viewModel.deleteTrack()
             } else {
-                binding.audioplayerRightButton.background =
-                    getDrawable(R.drawable.audioplayer_right_button_active)
-                viewModel.insertTrack()
+                binding.audioplayerRightButton.background = getDrawable(R.drawable.audioplayer_right_button_active)
                 currentTrack.isFavourite = true
+                viewModel.insertTrack()
             }
         }
 

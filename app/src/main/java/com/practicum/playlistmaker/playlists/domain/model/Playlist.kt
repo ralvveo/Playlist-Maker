@@ -5,9 +5,9 @@ import android.net.Uri
 
 data class Playlist (
     val playlistId: Long,
-    val playlistName: String,
-    val playlistDescr: String,
-    val playlistImage: Uri,
+    var playlistName: String,
+    var playlistDescr: String,
+    var playlistImage: Uri,
     var playlistTrackIds: String,
     var playlistTrackCount: String
 )

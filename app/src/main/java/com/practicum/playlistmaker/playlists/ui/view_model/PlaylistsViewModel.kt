@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.favourites.domain.state.MediaState
-import com.practicum.playlistmaker.player.domain.model.Track
-import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistInteractor
+import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistsInteractor
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -16,7 +14,7 @@ import org.koin.core.parameter.parametersOf
 class PlaylistsViewModel : ViewModel(), KoinComponent {
 
     private val state = MutableLiveData<MutableList<Playlist>>()
-    private val playlistInteractor: PlaylistInteractor by inject(){
+    private val playlistsInteractor: PlaylistsInteractor by inject(){
         parametersOf(this)
     }
 
@@ -30,7 +28,7 @@ class PlaylistsViewModel : ViewModel(), KoinComponent {
 
     fun read() {
         viewModelScope.launch {
-            playlistInteractor
+            playlistsInteractor
                 .getPlaylistList()
                 .collect { playlists ->
                     state.postValue(playlists.toMutableList())

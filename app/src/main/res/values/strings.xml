@@ -1,4 +1,24 @@
 <resources>
+
+    <plurals name="plurals_tracks">
+        <item quantity="zero">нет треков</item>
+        <item quantity="one">%1$d трек</item>
+        <item quantity="two">%1$d трека</item>
+        <item quantity="few">%1$d трека</item>
+        <item quantity="many">%1$d треков</item>
+        <item quantity="other">%1$d треков</item>
+    </plurals>
+
+
+    <plurals name="plurals_minutes">
+        <item quantity="zero">0 минут</item>
+        <item quantity="one">%1$d минута</item>
+        <item quantity="two">%1$d минуты</item>
+        <item quantity="few">%1$d минуты</item>
+        <item quantity="many">%1$d минут</item>
+        <item quantity="other">%1$d минут</item>
+    </plurals>
+
     <string name="app_name">Playlist Maker</string>
     <string name="search">Поиск</string>
     <string name="media">Медиатека</string>
@@ -43,4 +63,19 @@
 
     <string name="added_to_playlist">Добавлено в плейлист</string>
     <string name="already_added_to_playlist"> Трек уже добавлен в плейлист</string>
+    <string name="no">НЕТ</string>
+    <string name="yes">ДА</string>
+    <string name="wanna_delete_track">Хотите удалить трек?</string>
+    <string name="nothing_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+
+    <string name="share">Поделиться</string>
+    <string name="change_info">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+
+    <string name="wanna_delete_playlist">Хотите удалить плейлист</string>
+
+    <string name="change">Редактировать</string>
+    <string name="save">Сохранить</string>
+
 </resources>
+

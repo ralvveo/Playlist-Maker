@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.playlists.data.converters.CorrectEnding
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import java.io.File
 
@@ -25,7 +24,7 @@ class PlaylistListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) 
 
     fun bind(model: Playlist) {
         playlistName.text = model.playlistName
-        playlistTrackCount.text = "${model.playlistTrackCount} ${CorrectEnding.doEnding(model.playlistTrackCount.toInt())}"
+        playlistTrackCount.text = itemView.resources.getQuantityString(R.plurals.plurals_tracks, model.playlistTrackCount.toInt(), model.playlistTrackCount.toInt())
         Log.d("PLAYLISTID", "${model.playlistId}")
         val fileCodeName = model.playlistImage.toString().takeLast(10)
         val filePath = File(playlistName.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), MY_ALBUM)
