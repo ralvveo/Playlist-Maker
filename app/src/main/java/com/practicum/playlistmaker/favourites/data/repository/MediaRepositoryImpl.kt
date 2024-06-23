@@ -14,6 +14,7 @@ class MediaRepositoryImpl(private val database: Database, private val converter:
 
     override suspend fun deleteTrack(track: Track) {
         database.trackDao().deleteTrack(converter.map(track))
+        database.trackDao().insertTrack(converter.map(track).copy(isFavourite = false))
     }
 
     override fun getTrackList(): Flow<List<Track>> = flow{

@@ -20,6 +20,7 @@
     <color name="audioplayer_icon_colors">#1A1B2240</color>
     <color name="grey_white">#E6E8EB</color>
     <color name="overlay_color">#99000000</color>
+    <color name="colorPrimary">#FFFFFFFF</color>
 
 
 </resources>

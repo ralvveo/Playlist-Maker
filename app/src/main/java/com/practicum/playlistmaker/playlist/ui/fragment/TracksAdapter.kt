@@ -19,7 +19,9 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 
 
-class TracksAdapter : RecyclerView.Adapter<TracksViewHolder> () {
+class TracksAdapter(
+    private val onLongClick: ((track: Track) -> Unit)
+) : RecyclerView.Adapter<TracksViewHolder> () {
 
     private var tracks: MutableList<Track> = mutableListOf()
     fun setTrackList(trackList: MutableList<Track>){
@@ -46,6 +48,10 @@ class TracksAdapter : RecyclerView.Adapter<TracksViewHolder> () {
                     displayIntent.putExtra("trackJson", Json.encodeToString(tracks[position]))
                     context.startActivity(displayIntent)
                 }
+            }
+            holder.itemView.setOnLongClickListener {
+                onLongClick(tracks[position])
+                true
             }
     }
 

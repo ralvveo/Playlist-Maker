@@ -34,12 +34,17 @@ class FavouritesViewModel : ViewModel(), KoinComponent {
     }
 
     private fun processResult(trackList: List<Track>) {
+        val favouriteTrackList = mutableListOf<Track>()
+        for (track in trackList){
+            if (track.isFavourite)
+                favouriteTrackList.add(track)
+        }
         mediaLiveData.value = trackList.toMutableList()
         if (trackList.isNullOrEmpty()){
             state.postValue(MediaState.NoFavourite)
         }
         else {
-            state.postValue(MediaState.MediaContent(trackList))
+            state.postValue(MediaState.MediaContent(favouriteTrackList))
         }
 
     }

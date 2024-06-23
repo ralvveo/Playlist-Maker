@@ -1,11 +1,11 @@
-package com.practicum.playlistmaker.playlists.ui.view_model
+package com.practicum.playlistmaker.playlist.ui.view_model
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistInteractor
+import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistsInteractor
 import com.practicum.playlistmaker.playlists.domain.model.NewPlaylistState
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class NewPlaylistViewModel : ViewModel(), KoinComponent {
 
 
     private val state = MutableLiveData<NewPlaylistState>()
-    private val newPlaylistsInteractor: PlaylistInteractor by inject()
+    private val newPlaylistsInteractor: PlaylistsInteractor by inject()
 
     init {
         state.value = NewPlaylistState(null, null, null)
@@ -29,11 +29,20 @@ class NewPlaylistViewModel : ViewModel(), KoinComponent {
     }
 
     fun setDescr(descr: String?) {
+        if (descr == null)
+            state.value = state.value?.copy(newPlaylistDescr = "")
         state.value = state.value?.copy(newPlaylistDescr = descr)
     }
 
     fun setImage(uri: Uri) {
         state.value = state.value?.copy(newPlaylistImage = uri)
+    }
+
+    fun savePlaylist(playlist: Playlist){
+        viewModelScope.launch{
+            newPlaylistsInteractor.changePlaylist(playlist)
+        }
+
     }
 
     fun createPlaylist() {

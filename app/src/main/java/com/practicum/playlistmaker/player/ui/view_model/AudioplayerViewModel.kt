@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.favourites.domain.interactor.MediaInteractor
-import com.practicum.playlistmaker.player.domain.MediaplayerInteractor
+import com.practicum.playlistmaker.player.domain.interactor.MediaplayerInteractor
 import com.practicum.playlistmaker.player.domain.model.AddedTrackStatus
 import com.practicum.playlistmaker.player.domain.model.PlayStatus
 import com.practicum.playlistmaker.player.domain.model.Track
 import com.practicum.playlistmaker.player.domain.repository.MyCallback
-import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistInteractor
+import com.practicum.playlistmaker.playlists.domain.interactor.PlaylistsInteractor
 import com.practicum.playlistmaker.playlists.domain.model.Playlist
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class AudioplayerViewModel(private val track: Track) : ViewModel(), MyCallback, 
     private val mediaplayerInteractor: MediaplayerInteractor by inject() {
         parametersOf(this)
     }
-    private val playlistInteractor: PlaylistInteractor by inject() {
+    private val playlistsInteractor: PlaylistsInteractor by inject() {
         parametersOf(this)
     }
 
@@ -62,7 +62,7 @@ class AudioplayerViewModel(private val track: Track) : ViewModel(), MyCallback, 
 
     fun checkPlaylists() {
         viewModelScope.launch {
-            playlistInteractor.getPlaylistList()
+            playlistsInteractor.getPlaylistList()
                 .collect { playlistList ->
                     playlistListLiveData.postValue(playlistList)
 
@@ -111,10 +111,14 @@ class AudioplayerViewModel(private val track: Track) : ViewModel(), MyCallback, 
         viewModelScope.launch {
             trackAddedLiveData.postValue(
                 AddedTrackStatus(
-                    playlistInteractor.addTrackToPlaylist(track, playlist),
+                    playlistsInteractor.addTrackToPlaylist(track, playlist),
                     playlist.playlistName
                 )
             )
+
+            mediaInteractor.insertTrack(track)
+
+
             delay(100L)
             checkPlaylists()
         }
